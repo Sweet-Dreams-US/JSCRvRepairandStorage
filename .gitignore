@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# playwright + screenshot artifacts (kept out of repo)
+.playwright-mcp/
+/*.png
+facebook-jsc.md
+
