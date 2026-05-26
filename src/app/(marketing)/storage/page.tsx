@@ -1,13 +1,18 @@
 import {
+  Anchor,
   ArrowRight,
   BatteryCharging,
   CheckCircle2,
   Droplets,
   Gauge,
   KeyRound,
+  LifeBuoy,
+  Sailboat,
   ShieldCheck,
   Sparkles,
+  Sunrise,
   Truck,
+  Waves,
   Zap,
 } from "lucide-react";
 import {
@@ -104,20 +109,25 @@ export default function StoragePage() {
         <div className="container-bleed grid gap-10 pt-14 pb-20 lg:grid-cols-12 lg:gap-16 lg:pt-20 lg:pb-28">
           <div className="lg:col-span-6">
             <Reveal>
-              <Eyebrow number="Zone A · B · C · Boat">Storage · Reserve Now</Eyebrow>
+              <Eyebrow number="Zone A · B · C · Boat">RV & Boat Storage · Reserve Now</Eyebrow>
             </Reveal>
             <h1 className="mt-7 font-display text-[clamp(3rem,7.5vw,7rem)] font-bold leading-[0.94] tracking-tight">
-              <WordReveal text="Store it here." />
+              <WordReveal text="Store your" />
               <br />
-              <WordReveal text="Drive away ready." delay={0.25} accent={["ready."]} swash={["ready."]} italic={["ready."]} />
+              <WordReveal text="rig." delay={0.18} italic={["rig."]} />{" "}
+              <WordReveal text="Or your" delay={0.32} />
+              <br />
+              <WordReveal text="boat." delay={0.55} accent={["boat."]} swash={["boat."]} italic={["boat."]} />
             </h1>
-            <Reveal delay={0.8}>
+            <Reveal delay={0.95}>
               <p className="mt-7 max-w-xl text-lg leading-relaxed text-ink/75">
-                Secured outdoor storage just off St. Rd. 15 in Leesburg — plus the
-                only on-site shop that preps your rig before every trip.
+                Secured outdoor storage just off St. Rd. 15 in Leesburg —{" "}
+                <span className="font-display italic">RVs &amp; boats both welcome</span>{" "}
+                — plus the only on-site shop that preps your rig before every trip
+                and helps your boat launch every spring.
               </p>
             </Reveal>
-            <Reveal delay={0.9}>
+            <Reveal delay={1.05}>
               <div className="mt-8 flex flex-wrap gap-3">
                 <StampButton href="/contact?topic=storage" variant="garage" size="lg">
                   Reserve a spot <ArrowRight />
@@ -126,6 +136,13 @@ export default function StoragePage() {
                   Call {BUSINESS.phone}
                 </StampButton>
               </div>
+            </Reveal>
+            <Reveal delay={1.15}>
+              <ul className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs font-mono uppercase tracking-[0.18em] text-ink/65">
+                <li className="flex items-center gap-2"><Truck className="h-3.5 w-3.5 text-garage" /> RV Storage</li>
+                <li className="flex items-center gap-2"><Sailboat className="h-3.5 w-3.5 text-garage" /> Boat Storage</li>
+                <li className="flex items-center gap-2"><Sparkles className="h-3.5 w-3.5 text-garage" /> Pickup Prep</li>
+              </ul>
             </Reveal>
           </div>
 
@@ -159,6 +176,140 @@ export default function StoragePage() {
             </Reveal>
           </div>
         </div>
+      </section>
+
+      {/* ──────────── BOAT STORAGE — dedicated lake-water section ──────────── */}
+      <section className="relative overflow-hidden bg-patina text-cream bg-grain bg-grain-strong">
+        {/* Decorative wave divider top */}
+        <svg
+          className="block h-6 w-full -mb-px text-cream"
+          preserveAspectRatio="none"
+          viewBox="0 0 1200 24"
+          aria-hidden
+        >
+          <path
+            d="M0 24 Q60 4 120 12 T240 12 T360 12 T480 12 T600 12 T720 12 T840 12 T960 12 T1080 12 T1200 12 L1200 0 L0 0 Z"
+            fill="currentColor"
+          />
+        </svg>
+
+        <div className="container-bleed grid items-center gap-12 py-24 lg:grid-cols-12 lg:gap-16 lg:py-32">
+          <div className="lg:col-span-6">
+            <Reveal>
+              <div className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.22em] text-cream/85">
+                <span className="rounded-sm border border-cream/40 px-1.5 py-0.5 font-bold">
+                  Zone Boat
+                </span>
+                <span className="flex items-center gap-2">
+                  <span className="h-px w-6 bg-current opacity-60" />
+                  For lake people
+                </span>
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.05}>
+              <h2 className="mt-7 font-display text-[clamp(2.6rem,6vw,5.5rem)] font-semibold leading-[0.98] tracking-tight">
+                <WordReveal text="Boats" italic={["boats"]} />{" "}
+                <WordReveal text="welcome" delay={0.12} />
+                <br />
+                <WordReveal
+                  text="too."
+                  delay={0.25}
+                  accent={["too."]}
+                  swash={["too."]}
+                  italic={["too."]}
+                  className="text-sand-dark"
+                />
+              </h2>
+            </Reveal>
+
+            <Reveal delay={0.5}>
+              <p className="mt-7 max-w-md text-lg leading-relaxed text-cream/85">
+                Wawasee, Tippy, Webster, Syracuse — we&apos;re in your backyard.
+                Park your boat with us off-season and we&apos;ll haul it back
+                trip-ready every spring. Pontoons, cruisers, ski boats, jon boats —
+                all welcome.
+              </p>
+            </Reveal>
+
+            <Reveal delay={0.6}>
+              <div className="mt-9 grid gap-4 sm:grid-cols-2">
+                <BoatPerk icon={<Sailboat />} title="All boat types" body="Trailerable up to 32′ — pontoons, cruisers, ski boats, jon boats" />
+                <BoatPerk icon={<Sunrise />} title="Spring launch help" body="We hitch it to your truck or shuttle it to your launch ramp" />
+                <BoatPerk icon={<ShieldCheck />} title="Secured lot" body="Fenced, lit, cameras — behind Owens Meat Market on St Rd 15" />
+                <BoatPerk icon={<Waves />} title="Winterization" body="Drain, antifreeze, shrink-wrap available — flat rate" />
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.75}>
+              <div className="mt-9 flex flex-wrap items-center gap-3">
+                <StampButton
+                  href="/contact?topic=boat-storage"
+                  variant="garage"
+                  size="lg"
+                >
+                  <Sailboat />
+                  Reserve a boat spot
+                </StampButton>
+                <div className="flex items-baseline gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-cream/70">
+                  <span>Starting at</span>
+                  <span className="font-display text-2xl font-bold text-cream">$65</span>
+                  <span>/ mo</span>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+
+          <div className="lg:col-span-6">
+            <Reveal delay={0.25} y={48}>
+              <div className="relative">
+                <div className="absolute -inset-3 border-2 border-cream/15" />
+                <div className="relative aspect-[3/2] overflow-hidden bg-ink shadow-[14px_14px_0_var(--garage)]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/images/boat-storage.png"
+                    alt="A cabin cruiser boat on its trailer at the JSC storage lot"
+                    className="h-full w-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent" />
+                  <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between text-cream">
+                    <div>
+                      <div className="font-mono text-[10px] uppercase tracking-[0.22em] opacity-80">
+                        Zone Boat · No. 02
+                      </div>
+                      <div className="font-display text-xl font-semibold">
+                        Cabin cruisers · Pontoons · Ski boats
+                      </div>
+                    </div>
+                    <StampBadge variant="garage" rotation={-8}>
+                      <Anchor className="h-3 w-3" />
+                      Lake-ready
+                    </StampBadge>
+                  </div>
+                </div>
+                <div className="absolute -top-5 -right-3 rotate-12">
+                  <StampBadge variant="brass" rotation={-12} className="bg-cream/95">
+                    <LifeBuoy className="h-3 w-3" />
+                    Spring launch incl.
+                  </StampBadge>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+
+        {/* Bottom wave divider */}
+        <svg
+          className="block h-6 w-full -mt-px rotate-180 text-paper"
+          preserveAspectRatio="none"
+          viewBox="0 0 1200 24"
+          aria-hidden
+        >
+          <path
+            d="M0 24 Q60 4 120 12 T240 12 T360 12 T480 12 T600 12 T720 12 T840 12 T960 12 T1080 12 T1200 12 L1200 0 L0 0 Z"
+            fill="currentColor"
+          />
+        </svg>
       </section>
 
       {/* ──────────── PRICING ──────────── */}
@@ -328,5 +479,27 @@ export default function StoragePage() {
         </div>
       </section>
     </>
+  );
+}
+
+function BoatPerk({
+  icon,
+  title,
+  body,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  body: string;
+}) {
+  return (
+    <div className="flex items-start gap-3 border-l-2 border-cream/30 pl-4">
+      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-cream text-patina [&_svg]:size-4">
+        {icon}
+      </span>
+      <div>
+        <div className="font-display text-base font-semibold">{title}</div>
+        <div className="mt-1 text-xs text-cream/70">{body}</div>
+      </div>
+    </div>
   );
 }

@@ -106,8 +106,8 @@ function Hero() {
               {[
                 "Family-owned · Joe answers",
                 "Motorhomes · 5th wheels · TTs",
+                "Boat storage & spring launch",
                 "Insurance & major work welcome",
-                "Pickup prep on stored RVs",
               ].map((line) => (
                 <li key={line} className="flex items-center gap-2.5">
                   <span className="h-1.5 w-1.5 rotate-45 bg-garage" />
@@ -167,11 +167,12 @@ function Ticker() {
     "MILE 6,283 N ST RD 15",
     `LEESBURG · IN ${BUSINESS.address.zip}`,
     `EST ${new Date().getFullYear() - BUSINESS.yearsInBusiness}`,
+    "RV · BOAT STORAGE OPEN",
     `★ ${BUSINESS.rating} / 5 · ${BUSINESS.reviewCount}+ REVIEWS`,
-    "ALL MAKES SERVICED",
-    "MOTORHOMES · 5TH WHEELS · TRAVEL TRAILERS · BOATS",
+    "MOTORHOMES · 5TH WHEELS · TRAVEL TRAILERS",
+    "BOATS · PONTOONS · CRUISERS WELCOME",
     "KOSCIUSKO & ELKHART COUNTY",
-    "BOOKING SPRING PICKUP PREP NOW",
+    "BOOKING SPRING LAUNCH NOW",
   ];
   return (
     <div className="relative border-y-2 border-ink bg-ink text-cream">
@@ -209,9 +210,9 @@ function Services() {
     {
       n: "03",
       icon: <KeyRound />,
-      title: "Storage",
+      title: "RV & Boat Storage",
       body:
-        "Secured outdoor RV & boat storage with the signature pickup-prep service before every trip.",
+        "Secured outdoor storage for motorhomes, trailers, and boats — plus the signature pickup-prep before every trip and spring launch.",
     },
     {
       n: "04",
@@ -319,7 +320,7 @@ function StorageSpotlight() {
             <p className="mt-7 max-w-lg text-lg text-cream/75">
               Joe&apos;s rule: just give us a heads-up before your trip and your
               rig will be aired, charged, topped off, and washed the day you
-              arrive. No more scrambling the night before.
+              arrive. <span className="font-display italic text-cream">Boats too</span> — winter haul-in, spring launch handled.
             </p>
           </Reveal>
 
