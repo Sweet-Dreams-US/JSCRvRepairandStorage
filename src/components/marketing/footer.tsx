@@ -1,23 +1,30 @@
 import Link from "next/link";
 import { Facebook, Instagram, Mail, MapPin, Phone } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
+import { OrnamentalRule } from "@/components/marketing/atoms/ornamental-rule";
+import { StampBadge } from "@/components/marketing/atoms/stamp-badge";
 import { BUSINESS, formatAddressLine } from "@/lib/business";
 
 export function MarketingFooter() {
   return (
-    <footer className="border-t bg-secondary/30">
-      <div className="container-wide grid gap-10 py-12 md:grid-cols-4">
-        <div className="md:col-span-2">
-          <Logo />
-          <p className="mt-4 max-w-md text-sm text-muted-foreground">
-            {BUSINESS.about}
+    <footer className="relative bg-ink text-cream bg-grain bg-grain-strong">
+      {/* Enameled top edge */}
+      <div className="h-1.5 bg-garage" />
+
+      <div className="container-wide relative grid gap-14 py-20 md:grid-cols-12">
+        {/* Brand block */}
+        <div className="md:col-span-5">
+          <Logo invert />
+          <p className="mt-6 max-w-md font-display text-xl leading-snug">
+            We&apos;re your local RV service experts, here to keep your rig
+            road-ready.
           </p>
-          <div className="mt-5 flex items-center gap-3">
+          <div className="mt-7 flex items-center gap-3">
             <a
               href={BUSINESS.socials.facebook}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-md border bg-background p-2 transition-colors hover:bg-accent"
+              className="grid h-10 w-10 place-items-center rounded-full border border-cream/20 transition-colors hover:bg-garage hover:border-garage"
               aria-label="Facebook"
             >
               <Facebook className="h-4 w-4" />
@@ -26,51 +33,95 @@ export function MarketingFooter() {
               href={BUSINESS.socials.instagram}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-md border bg-background p-2 transition-colors hover:bg-accent"
+              className="grid h-10 w-10 place-items-center rounded-full border border-cream/20 transition-colors hover:bg-garage hover:border-garage"
               aria-label="Instagram"
             >
               <Instagram className="h-4 w-4" />
             </a>
+            <StampBadge variant="brass" rotation={4} className="ml-3 border-brass/60 text-brass">
+              ★ {BUSINESS.rating} · {BUSINESS.reviewCount}+
+            </StampBadge>
           </div>
         </div>
-        <div>
-          <h3 className="text-sm font-semibold">Explore</h3>
-          <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-            <li><Link href="/services" className="hover:text-primary">Services</Link></li>
-            <li><Link href="/storage" className="hover:text-primary">Storage</Link></li>
-            <li><Link href="/about" className="hover:text-primary">About Joe</Link></li>
-            <li><Link href="/contact" className="hover:text-primary">Contact</Link></li>
-            <li><Link href="/login" className="hover:text-primary">Customer Portal</Link></li>
+
+        {/* Nav */}
+        <div className="md:col-span-3">
+          <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-cream/60">
+            ── Explore ──
+          </div>
+          <ul className="mt-4 grid gap-2.5 text-sm">
+            <FooterLink href="/services">Services</FooterLink>
+            <FooterLink href="/storage">Storage</FooterLink>
+            <FooterLink href="/about">About Joe</FooterLink>
+            <FooterLink href="/contact">Contact</FooterLink>
+            <FooterLink href="/login">Customer Portal</FooterLink>
           </ul>
         </div>
-        <div>
-          <h3 className="text-sm font-semibold">Visit Us</h3>
-          <ul className="mt-3 space-y-3 text-sm text-muted-foreground">
-            <li className="flex items-start gap-2">
-              <MapPin className="mt-0.5 h-4 w-4 text-primary" />
+
+        {/* Contact card — looks like an enameled service plate */}
+        <div className="md:col-span-4">
+          <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-cream/60">
+            ── Visit the shop ──
+          </div>
+          <ul className="mt-4 grid gap-3 text-sm">
+            <li className="flex items-start gap-3">
+              <MapPin className="mt-0.5 h-4 w-4 text-garage shrink-0" />
               <span>
                 {formatAddressLine()}
                 <br />
-                <span className="text-xs">{BUSINESS.address.landmark}</span>
+                <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-cream/50">
+                  {BUSINESS.address.landmark}
+                </span>
               </span>
             </li>
-            <li className="flex items-center gap-2">
-              <Phone className="h-4 w-4 text-primary" />
-              <a href={`tel:${BUSINESS.phoneRaw}`} className="hover:text-primary">{BUSINESS.phone}</a>
+            <li>
+              <a
+                href={`tel:${BUSINESS.phoneRaw}`}
+                className="flex items-center gap-3 hover:text-garage"
+              >
+                <Phone className="h-4 w-4 text-garage" />
+                {BUSINESS.phone}
+              </a>
             </li>
-            <li className="flex items-center gap-2">
-              <Mail className="h-4 w-4 text-primary" />
-              <a href={`mailto:${BUSINESS.email}`} className="hover:text-primary">{BUSINESS.email}</a>
+            <li>
+              <a
+                href={`mailto:${BUSINESS.email}`}
+                className="flex items-center gap-3 hover:text-garage"
+              >
+                <Mail className="h-4 w-4 text-garage" />
+                {BUSINESS.email}
+              </a>
             </li>
           </ul>
         </div>
       </div>
-      <div className="border-t bg-secondary/40">
-        <div className="container-wide flex flex-col items-center justify-between gap-2 py-4 text-xs text-muted-foreground md:flex-row">
-          <span>© {new Date().getFullYear()} {BUSINESS.name}. All rights reserved.</span>
-          <span>Serving Kosciusko & Elkhart counties since {new Date().getFullYear() - BUSINESS.yearsInBusiness}.</span>
+
+      <div className="container-wide pb-10">
+        <OrnamentalRule variant="compass" className="text-cream/30 mb-8" />
+        <div className="flex flex-col items-start justify-between gap-3 font-mono text-[11px] uppercase tracking-[0.22em] text-cream/55 md:flex-row md:items-center">
+          <span>© {new Date().getFullYear()} JSC RV Repair · All rights reserved</span>
+          <span className="flex items-center gap-2">
+            <span className="h-1 w-1 rounded-full bg-garage" />
+            Stamped &amp; serviced in Leesburg, Indiana — Est {new Date().getFullYear() - BUSINESS.yearsInBusiness}
+          </span>
         </div>
       </div>
     </footer>
+  );
+}
+
+function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <li>
+      <Link
+        href={href}
+        className="group inline-flex items-center gap-2 text-cream/85 transition-colors hover:text-garage"
+      >
+        <span className="font-mono text-[10px] text-cream/30 transition-colors group-hover:text-garage">
+          ▸
+        </span>
+        {children}
+      </Link>
+    </li>
   );
 }

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
   ArrowRight,
   CheckCircle2,
@@ -9,9 +8,12 @@ import {
   Sparkles,
   Wrench,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Eyebrow } from "@/components/marketing/atoms/eyebrow";
+import { OrnamentalRule } from "@/components/marketing/atoms/ornamental-rule";
+import { Reveal, RevealGroup, RevealItem } from "@/components/marketing/atoms/reveal";
+import { StampBadge } from "@/components/marketing/atoms/stamp-badge";
+import { StampButton } from "@/components/marketing/atoms/stamp-button";
+import { WordReveal } from "@/components/marketing/atoms/word-reveal";
 import { LeadForm } from "@/components/marketing/lead-form";
 import { BUSINESS } from "@/lib/business";
 
@@ -19,8 +21,9 @@ export const metadata = { title: "Services — RV Repair & Maintenance" };
 
 const sections = [
   {
+    n: "01",
     title: "Diagnostics & Repair",
-    icon: <Wrench className="h-5 w-5" />,
+    icon: <Wrench />,
     blurb:
       "When something stops working, we figure out why and tell you the real story — not the most expensive one.",
     items: [
@@ -35,8 +38,9 @@ const sections = [
     ],
   },
   {
+    n: "02",
     title: "Routine Maintenance",
-    icon: <Cog className="h-5 w-5" />,
+    icon: <Cog />,
     blurb:
       "Stay on top of your rig with manufacturer-spec service intervals — and skip the headaches before they start.",
     items: [
@@ -51,8 +55,9 @@ const sections = [
     ],
   },
   {
+    n: "03",
     title: "Appliances & Systems",
-    icon: <Flame className="h-5 w-5" />,
+    icon: <Flame />,
     blurb:
       "Our techs are certified on the major appliance brands — and not afraid of the weird ones either.",
     items: [
@@ -65,8 +70,9 @@ const sections = [
     ],
   },
   {
+    n: "04",
     title: "Body, Roof & Insurance",
-    icon: <Shield className="h-5 w-5" />,
+    icon: <Shield />,
     blurb:
       "Big or small, cosmetic or structural — including direct work with your insurance adjuster.",
     items: [
@@ -86,138 +92,204 @@ const packages = [
     price: "$195",
     blurb: "De-winterize, sanitize, top-off, check tires and battery. Ready to roll.",
     badge: "Most Popular",
-    badgeColor: "default" as const,
-    icon: <Sparkles className="h-5 w-5" />,
+    icon: <Sparkles />,
   },
   {
     name: "Full Pre-Trip",
     price: "$385",
     blurb: "Tires, brakes, slides, seals, generator, all systems checked & signed off.",
     badge: "Peace of Mind",
-    badgeColor: "info" as const,
-    icon: <CheckCircle2 className="h-5 w-5" />,
+    icon: <CheckCircle2 />,
   },
   {
     name: "Winterize",
     price: "$145",
     blurb: "Blow-out, antifreeze, bypass water heater, drop holding tanks.",
     badge: "Seasonal",
-    badgeColor: "secondary" as const,
-    icon: <Snowflake className="h-5 w-5" />,
+    icon: <Snowflake />,
   },
 ];
 
 export default function ServicesPage() {
   return (
     <>
-      <section className="border-b bg-radial-grid">
-        <div className="container-wide grid gap-6 py-16 md:grid-cols-[1.2fr_1fr] md:items-center md:py-24">
-          <div>
-            <Badge className="bg-primary/10 text-primary">Services</Badge>
-            <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight md:text-5xl">
-              Every wrench you need. One shop.
+      {/* ──────────── HERO ──────────── */}
+      <section className="relative overflow-hidden bg-cream bg-grain">
+        <div className="container-bleed grid gap-10 pt-14 pb-20 lg:grid-cols-12 lg:gap-16 lg:pt-20 lg:pb-28">
+          <div className="lg:col-span-7">
+            <Reveal>
+              <Eyebrow number="No. 01">The Service Menu · Updated {new Date().getFullYear()}</Eyebrow>
+            </Reveal>
+            <h1 className="mt-7 font-display text-[clamp(3rem,7.5vw,7rem)] font-bold leading-[0.94] tracking-tight">
+              <WordReveal text="Every wrench" />
+              <br />
+              <WordReveal text="you need." delay={0.2} accent={["need."]} swash={["need."]} italic={["need."]} />
+              <br />
+              <WordReveal text="One shop." delay={0.45} italic={["one", "shop."]} />
             </h1>
-            <p className="mt-4 max-w-xl text-lg text-muted-foreground">
-              We work on every make and model — Class A motorhomes through pop-ups,
-              fifth wheels, toy haulers, and boats. From a five-minute fix to a
-              total restoration.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Button asChild size="lg">
-                <Link href="/contact">
-                  Get a quote <ArrowRight className="h-4 w-4" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg">
-                <a href={`tel:${BUSINESS.phoneRaw}`}>Call {BUSINESS.phone}</a>
-              </Button>
-            </div>
-          </div>
-          <Card className="border-2">
-            <CardContent className="p-6">
-              <h3 className="text-lg font-semibold">Service packages</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Common bundles at a flat rate. Custom work always available.
+            <Reveal delay={0.8}>
+              <p className="mt-7 max-w-xl text-lg leading-relaxed text-ink/75">
+                We work on every make and model — Class A motorhomes through pop-ups,
+                fifth wheels, toy haulers, and boats. From a five-minute fix to a
+                total restoration.
               </p>
-              <div className="mt-5 grid gap-3">
-                {packages.map((p) => (
-                  <div key={p.name} className="flex items-start gap-3 rounded-lg border bg-secondary/30 p-3">
-                    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-md bg-primary/10 text-primary">
-                      {p.icon}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold">{p.name}</span>
-                        <Badge variant={p.badgeColor}>{p.badge}</Badge>
-                      </div>
-                      <p className="mt-1 text-xs text-muted-foreground">{p.blurb}</p>
-                    </div>
-                    <div className="text-sm font-semibold">{p.price}</div>
-                  </div>
-                ))}
+            </Reveal>
+            <Reveal delay={0.9}>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <StampButton href="/contact" variant="garage" size="lg">
+                  Get a quote <ArrowRight />
+                </StampButton>
+                <StampButton href={`tel:${BUSINESS.phoneRaw}`} external variant="ink" size="lg">
+                  Call {BUSINESS.phone}
+                </StampButton>
               </div>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
+            </Reveal>
+          </div>
 
-      <section className="border-b">
-        <div className="container-wide py-12">
-          <div className="overflow-hidden rounded-2xl border-2 border-foreground/5 shadow-xl">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/shop-interior.png"
-              alt="JSC RV Repair shop interior"
-              className="h-72 w-full object-cover sm:h-96"
-            />
+          <div className="lg:col-span-5">
+            <Reveal delay={0.35} y={48}>
+              <div className="relative">
+                <div className="absolute -inset-3 border-2 border-ink/15" />
+                <div className="relative aspect-[4/5] overflow-hidden bg-ink lg:aspect-[3/4]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/images/wrench-hands.png"
+                    alt="A technician torquing an RV slide-out hardware bolt"
+                    className="h-full w-full object-cover contrast-95"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink/65 via-transparent to-transparent" />
+                  <div className="absolute bottom-5 left-5 right-5 text-cream">
+                    <div className="font-mono text-[10px] uppercase tracking-[0.22em] opacity-80">
+                      Work order WO-1043
+                    </div>
+                    <div className="font-display text-xl font-semibold">Slide-out torque · in progress</div>
+                  </div>
+                </div>
+                <div className="absolute -top-4 -right-3 rotate-6">
+                  <StampBadge variant="garage" rotation={-10}>
+                    Hank · Lead Tech
+                  </StampBadge>
+                </div>
+              </div>
+            </Reveal>
           </div>
         </div>
       </section>
 
-      <section className="border-b">
-        <div className="container-wide py-20">
-          <div className="grid gap-6 md:grid-cols-2">
-            {sections.map((sec) => (
-              <Card key={sec.title} className="border-2">
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-3">
-                    <div className="grid h-11 w-11 place-items-center rounded-lg bg-primary text-primary-foreground">
-                      {sec.icon}
-                    </div>
-                    <h2 className="text-xl font-semibold">{sec.title}</h2>
+      {/* ──────────── PACKAGES ──────────── */}
+      <section className="relative bg-paper bg-grain">
+        <div className="container-wide py-20 lg:py-28">
+          <div className="grid items-end gap-8 md:grid-cols-[1fr_auto]">
+            <Reveal>
+              <Eyebrow number="No. 02">Flat-rate packages</Eyebrow>
+              <h2 className="mt-6 font-display text-[clamp(2rem,4.5vw,3.5rem)] font-semibold leading-[1.04] tracking-tight">
+                Three jobs we know <span className="italic text-garage">cold</span>.
+              </h2>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <p className="max-w-sm text-sm text-ink/65">
+                Common bundles at a flat rate. Anything custom — call and we&apos;ll
+                quote within the day.
+              </p>
+            </Reveal>
+          </div>
+
+          <RevealGroup className="mt-12 grid gap-5 md:grid-cols-3">
+            {packages.map((p, i) => (
+              <RevealItem key={p.name}>
+                <div className="group relative h-full bg-cream border-2 border-ink p-7 transition-all hover:-translate-y-1 hover:shadow-[8px_8px_0_var(--garage)]">
+                  <div className="flex items-start justify-between">
+                    <span className="font-display text-5xl font-bold leading-none text-sand-dark group-hover:text-garage transition-colors">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="grid h-10 w-10 place-items-center rounded-full bg-ink text-cream [&_svg]:size-4">
+                      {p.icon}
+                    </span>
                   </div>
-                  <p className="mt-3 text-sm text-muted-foreground">{sec.blurb}</p>
-                  <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+                  <StampBadge variant="ink" rotation={-3} className="mt-7">
+                    {p.badge}
+                  </StampBadge>
+                  <h3 className="mt-3 font-display text-2xl font-semibold">{p.name}</h3>
+                  <p className="mt-3 text-sm text-ink/70">{p.blurb}</p>
+                  <div className="mt-6 flex items-end justify-between border-t border-ink/15 pt-4">
+                    <div>
+                      <div className="font-mono text-[9px] uppercase tracking-[0.22em] text-ink/55">
+                        Starts at
+                      </div>
+                      <div className="font-display text-3xl font-bold">{p.price}</div>
+                    </div>
+                    <StampButton href="/contact" variant="garage" size="md">
+                      Book
+                    </StampButton>
+                  </div>
+                </div>
+              </RevealItem>
+            ))}
+          </RevealGroup>
+        </div>
+      </section>
+
+      {/* ──────────── SERVICE MENU ──────────── */}
+      <section className="relative bg-cream bg-grain">
+        <div className="container-wide py-20 lg:py-28">
+          <Reveal className="mx-auto max-w-3xl text-center">
+            <Eyebrow number="No. 03" className="justify-center">The complete menu</Eyebrow>
+            <h2 className="mt-6 font-display text-[clamp(2.4rem,5vw,4.5rem)] font-semibold leading-[1.02] tracking-tight">
+              Everything we do, <span className="italic text-garage">on one page</span>.
+            </h2>
+          </Reveal>
+
+          <Reveal delay={0.15} className="mt-12">
+            <OrnamentalRule variant="stars" className="mx-auto max-w-2xl text-ink/30" />
+          </Reveal>
+
+          <RevealGroup className="mt-12 grid gap-6 md:grid-cols-2" stagger={0.1}>
+            {sections.map((sec) => (
+              <RevealItem key={sec.n}>
+                <article className="relative h-full border-2 border-ink/85 bg-paper p-7 transition-all hover:border-garage hover:shadow-[6px_6px_0_var(--ink)]">
+                  <div className="flex items-center gap-4">
+                    <span className="font-display text-4xl font-bold text-sand-dark">{sec.n}</span>
+                    <span className="grid h-11 w-11 place-items-center rounded-full bg-ink text-cream [&_svg]:size-5">
+                      {sec.icon}
+                    </span>
+                    <h3 className="font-display text-2xl font-semibold tracking-tight">{sec.title}</h3>
+                  </div>
+                  <p className="mt-4 text-sm text-ink/70">{sec.blurb}</p>
+                  <ul className="mt-5 grid gap-2 sm:grid-cols-2">
                     {sec.items.map((it) => (
-                      <li key={it} className="flex items-start gap-2 text-sm">
-                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" />
+                      <li key={it} className="flex items-start gap-2 text-[13px]">
+                        <span className="mt-1.5 h-1 w-1 shrink-0 rotate-45 bg-garage" />
                         <span>{it}</span>
                       </li>
                     ))}
                   </ul>
-                </CardContent>
-              </Card>
+                </article>
+              </RevealItem>
             ))}
-          </div>
+          </RevealGroup>
         </div>
       </section>
 
-      <section className="border-b bg-foreground text-background">
-        <div className="container-wide grid gap-10 py-16 md:grid-cols-[1fr_420px] md:items-center">
-          <div>
-            <h2 className="font-display text-3xl font-bold md:text-4xl">
-              Not sure what you need? Just ask.
+      {/* ──────────── CTA ──────────── */}
+      <section className="relative bg-ink text-cream bg-grain bg-grain-strong">
+        <div className="container-wide grid gap-12 py-20 lg:grid-cols-[1fr_420px] lg:items-center lg:py-28">
+          <Reveal>
+            <Eyebrow number="No. 04" className="text-cream/70">Not sure?</Eyebrow>
+            <h2 className="mt-6 font-display text-[clamp(2.4rem,5.5vw,5rem)] font-semibold leading-[1.02] tracking-tight">
+              Just describe the symptom.{" "}
+              <span className="italic text-garage">We&apos;ll handle the rest.</span>
             </h2>
-            <p className="mt-3 max-w-xl text-background/70">
-              Describe the symptom — even a vague one — and we’ll tell you what
-              we’d check, ballpark cost, and when we could get you in.
+            <p className="mt-6 max-w-md text-lg text-cream/75">
+              Even a vague description — &ldquo;something&apos;s leaking from
+              underneath&rdquo; — and we&apos;ll tell you what we&apos;d check,
+              the ballpark, and when we could get you in.
             </p>
-          </div>
-          <Card className="text-foreground">
-            <CardContent className="p-6">
+          </Reveal>
+          <Reveal delay={0.2}>
+            <div className="bg-cream p-7 text-ink shadow-[12px_12px_0_var(--garage)]">
               <LeadForm compact />
-            </CardContent>
-          </Card>
+            </div>
+          </Reveal>
         </div>
       </section>
     </>

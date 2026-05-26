@@ -6,20 +6,22 @@ import {
   CheckCircle2,
   Droplets,
   Gauge,
-  Hammer,
   KeyRound,
   MapPin,
   Phone,
-  Quote,
-  ShieldCheck,
   Sparkles,
   Star,
   Truck,
   Wrench,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Eyebrow } from "@/components/marketing/atoms/eyebrow";
+import { Marquee } from "@/components/marketing/atoms/marquee";
+import { OrnamentalRule } from "@/components/marketing/atoms/ornamental-rule";
+import { Reveal, RevealGroup, RevealItem } from "@/components/marketing/atoms/reveal";
+import { StampBadge } from "@/components/marketing/atoms/stamp-badge";
+import { StampButton } from "@/components/marketing/atoms/stamp-button";
+import { WordReveal } from "@/components/marketing/atoms/word-reveal";
 import { LeadForm } from "@/components/marketing/lead-form";
 import { BUSINESS, formatAddressLine } from "@/lib/business";
 
@@ -27,7 +29,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <TrustBar />
+      <Ticker />
       <Services />
       <StorageSpotlight />
       <HowItWorks />
@@ -38,509 +40,612 @@ export default function HomePage() {
   );
 }
 
-// ---------- Hero ----------
+/* ════════════════════════════════════════════════════════════
+   HERO — editorial magazine cover
+   ════════════════════════════════════════════════════════════ */
 function Hero() {
   return (
-    <section className="relative overflow-hidden border-b bg-radial-grid">
-      <div className="container-wide grid gap-12 py-16 md:grid-cols-[1.05fr_1fr] md:gap-16 md:py-24">
-        <div className="flex flex-col justify-center">
-          <Badge variant="secondary" className="w-fit gap-1.5 bg-primary/10 text-primary">
-            <span className="h-2 w-2 rounded-full bg-primary" />
-            Booking now for spring service & storage pickups
-          </Badge>
-          <h1 className="mt-5 font-display text-4xl font-extrabold leading-[1.05] tracking-tight md:text-6xl">
-            Your rig.{" "}
-            <span className="text-primary">Road-ready</span>{" "}
-            whenever you are.
-          </h1>
-          <p className="mt-5 max-w-xl text-lg text-muted-foreground">
-            Locally owned RV repair, storage, and maintenance in Leesburg, Indiana.
-            From a leaky slide-out to a full pre-trip prep, Joe and the crew treat
-            your RV like it’s their own.
-          </p>
-          <div className="mt-7 flex flex-wrap items-center gap-3">
-            <Button asChild size="xl">
-              <Link href="/contact">
-                Get a free estimate
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </Button>
-            <Button asChild size="xl" variant="outline">
-              <a href={`tel:${BUSINESS.phoneRaw}`}>
-                <Phone className="h-4 w-4" />
-                {BUSINESS.phone}
-              </a>
-            </Button>
-          </div>
-          <ul className="mt-8 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
-            {[
-              "Family-owned & operated",
-              "All makes & models",
-              "Insurance & major repair work",
-              "Pickup prep on stored RVs",
-            ].map((line) => (
-              <li key={line} className="flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-success" />
-                {line}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <HeroPanel />
-      </div>
-    </section>
-  );
-}
+    <section className="relative overflow-hidden bg-cream bg-grain">
+      <div className="container-bleed relative grid gap-10 pb-20 pt-12 lg:grid-cols-12 lg:gap-12 lg:py-20">
+        {/* LEFT — editorial type stack */}
+        <div className="relative z-10 flex flex-col justify-center lg:col-span-7">
+          <Reveal delay={0.05}>
+            <Eyebrow number="No. 01" className="mb-7">
+              Est. {new Date().getFullYear() - BUSINESS.yearsInBusiness} · Leesburg, IN · All Makes Serviced
+            </Eyebrow>
+          </Reveal>
 
-function HeroPanel() {
-  return (
-    <div className="relative">
-      <div className="absolute -inset-6 -z-10 rounded-3xl bg-gradient-to-br from-primary/15 via-transparent to-brand-gray/10 blur-2xl" />
-      <Card className="overflow-hidden border-2 border-foreground/5 shadow-xl">
-        <div className="relative h-56 overflow-hidden bg-gradient-to-br from-brand-gray-dark via-brand-gray to-zinc-800">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/images/hero-shop.png"
-            alt="The JSC RV Repair lot — RVs and the shop"
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-          <div className="absolute bottom-3 left-4 right-4 flex items-end justify-between text-white">
-            <div>
-              <div className="text-xs uppercase tracking-wide opacity-80">Today on the lot</div>
-              <div className="text-lg font-semibold">26 RVs stored · 4 active jobs</div>
+          <h1 className="font-display text-[clamp(3.5rem,9vw,8rem)] font-bold leading-[0.92] tracking-tight text-letterpress">
+            <WordReveal
+              text="Your rig."
+              accent={[]}
+              className="block"
+              stagger={0.07}
+              delay={0.15}
+            />
+            <WordReveal
+              text="Road-ready"
+              accent={["road-ready"]}
+              swash={["road-ready"]}
+              italic={["road-ready"]}
+              className="mt-1 block font-medium"
+              stagger={0.07}
+              delay={0.32}
+            />
+            <WordReveal
+              text="whenever you are."
+              className="block"
+              stagger={0.06}
+              delay={0.55}
+            />
+          </h1>
+
+          <Reveal delay={0.95} y={20}>
+            <p className="mt-9 max-w-xl text-lg leading-relaxed text-ink/80 md:text-xl">
+              Family-owned RV repair, storage &amp; maintenance just off St. Rd. 15.
+              From slide-out motors to full pre-trip prep, Joe and the crew treat
+              your rig like it&apos;s their own.
+            </p>
+          </Reveal>
+
+          <Reveal delay={1.05}>
+            <div className="mt-9 flex flex-wrap items-center gap-4">
+              <StampButton href="/contact" variant="garage" size="lg">
+                Get a free estimate
+                <ArrowRight />
+              </StampButton>
+              <StampButton href={`tel:${BUSINESS.phoneRaw}`} external variant="ink" size="lg">
+                <Phone />
+                {BUSINESS.phone}
+              </StampButton>
             </div>
-            <Badge className="bg-success text-white">All systems go</Badge>
-          </div>
+          </Reveal>
+
+          <Reveal delay={1.2}>
+            <ul className="mt-10 grid gap-y-2 text-sm text-ink/70 sm:grid-cols-2 sm:gap-x-6">
+              {[
+                "Family-owned · Joe answers",
+                "Motorhomes · 5th wheels · TTs",
+                "Insurance & major work welcome",
+                "Pickup prep on stored RVs",
+              ].map((line) => (
+                <li key={line} className="flex items-center gap-2.5">
+                  <span className="h-1.5 w-1.5 rotate-45 bg-garage" />
+                  <span>{line}</span>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
         </div>
-        <CardContent className="grid gap-3 p-6">
-          <div className="flex items-center gap-3">
-            <div className="grid h-10 w-10 place-items-center rounded-full bg-primary/10 text-primary">
-              <Sparkles className="h-5 w-5" />
-            </div>
-            <div className="flex-1">
-              <div className="text-sm font-semibold">The signature touch</div>
-              <div className="text-sm text-muted-foreground">
-                Tell us when you’re heading out. We’ll air the tires, charge the
-                battery, top off the propane — even wash her down — so she’s ready
-                to roll the second you arrive.
+
+        {/* RIGHT — hero image with editorial border + stamp */}
+        <div className="relative lg:col-span-5">
+          <Reveal delay={0.3} y={48}>
+            <div className="relative">
+              <div className="absolute -inset-3 border-2 border-ink/15 md:-inset-5" />
+              <div className="relative aspect-[4/5] overflow-hidden bg-ink lg:aspect-[3/4]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/images/hero-shop.png"
+                  alt="The JSC RV Repair lot in Leesburg, Indiana"
+                  className="h-full w-full object-cover saturate-90 contrast-95"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/55 via-transparent to-transparent" />
+                <div className="absolute inset-x-5 bottom-5 flex items-end justify-between text-cream">
+                  <div>
+                    <div className="font-mono text-[10px] uppercase tracking-[0.22em] opacity-80">
+                      Plate No. 6283
+                    </div>
+                    <div className="font-display text-xl font-semibold">
+                      The Lot · St. Rd. 15
+                    </div>
+                  </div>
+                  <span className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.22em] opacity-90">
+                    <span className="h-1.5 w-1.5 rounded-full bg-patina animate-soft-pulse" />
+                    Open Now
+                  </span>
+                </div>
+              </div>
+              <div className="absolute -top-4 -right-3 rotate-6 md:-top-6 md:-right-5">
+                <StampBadge variant="garage" rotation={-12}>
+                  ★ {BUSINESS.rating} / 5 · {BUSINESS.reviewCount}+
+                </StampBadge>
               </div>
             </div>
-          </div>
-          <div className="grid gap-2 sm:grid-cols-3">
-            <PrepTag icon={<Gauge className="h-3.5 w-3.5" />} label="Tires aired" />
-            <PrepTag icon={<BatteryCharging className="h-3.5 w-3.5" />} label="Battery topped" />
-            <PrepTag icon={<Droplets className="h-3.5 w-3.5" />} label="Tanks ready" />
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
-
-function PrepTag({ icon, label }: { icon: React.ReactNode; label: string }) {
-  return (
-    <div className="flex items-center justify-center gap-1.5 rounded-md border bg-secondary/50 px-2.5 py-1.5 text-xs font-medium">
-      {icon}
-      {label}
-    </div>
-  );
-}
-
-function RvIllustration({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg" className={className}>
-      <defs>
-        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#fff" stopOpacity="0.15" />
-          <stop offset="1" stopColor="#fff" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      <rect width="600" height="240" fill="url(#sky)" />
-      {/* Mountains */}
-      <path
-        d="M0 180 L70 110 L130 160 L210 90 L290 170 L370 120 L460 180 L540 130 L600 170 L600 240 L0 240 Z"
-        fill="rgba(255,255,255,0.07)"
-      />
-      {/* Road */}
-      <rect x="0" y="200" width="600" height="40" fill="rgba(255,255,255,0.08)" />
-      <line
-        x1="0"
-        y1="220"
-        x2="600"
-        y2="220"
-        stroke="rgba(255,255,255,0.4)"
-        strokeWidth="2"
-        strokeDasharray="20 14"
-      />
-      {/* RV body */}
-      <g transform="translate(140 90)">
-        <rect x="0" y="0" width="260" height="80" rx="10" fill="currentColor" />
-        <path d="M260 0 Q310 0 320 35 Q325 50 320 80 L260 80 Z" fill="currentColor" />
-        <rect x="10" y="14" width="44" height="34" rx="3" fill="rgba(0,0,0,0.25)" />
-        <rect x="64" y="14" width="44" height="34" rx="3" fill="rgba(0,0,0,0.25)" />
-        <rect x="118" y="14" width="64" height="34" rx="3" fill="rgba(0,0,0,0.25)" />
-        <rect x="192" y="14" width="60" height="34" rx="3" fill="rgba(0,0,0,0.25)" />
-        <rect x="0" y="62" width="320" height="18" fill="rgba(0,0,0,0.18)" />
-        {/* Door */}
-        <rect x="86" y="56" width="22" height="24" fill="rgba(0,0,0,0.35)" />
-        {/* Wheels */}
-        <circle cx="60" cy="100" r="18" fill="rgba(0,0,0,0.85)" />
-        <circle cx="60" cy="100" r="7" fill="currentColor" />
-        <circle cx="220" cy="100" r="18" fill="rgba(0,0,0,0.85)" />
-        <circle cx="220" cy="100" r="7" fill="currentColor" />
-        {/* Stripe */}
-        <path d="M0 50 L260 50 L320 50 Q322 56 320 60 L0 60 Z" fill="#dc2626" opacity="0.85" />
-      </g>
-    </svg>
-  );
-}
-
-// ---------- Trust Bar ----------
-function TrustBar() {
-  return (
-    <section className="border-b bg-background">
-      <div className="container-wide grid gap-6 py-6 text-sm md:grid-cols-4 md:gap-3">
-        <TrustStat
-          icon={<Star className="h-4 w-4 fill-warning text-warning" />}
-          label={`${BUSINESS.rating} / 5 · ${BUSINESS.reviewCount}+ reviews`}
-        />
-        <TrustStat icon={<ShieldCheck className="h-4 w-4 text-success" />} label="Fully insured · garage liability" />
-        <TrustStat icon={<Hammer className="h-4 w-4 text-primary" />} label={`${BUSINESS.yearsInBusiness}+ years in the shop`} />
-        <TrustStat icon={<MapPin className="h-4 w-4 text-info" />} label={`Leesburg, IN · ${BUSINESS.address.landmark}`} />
+          </Reveal>
+        </div>
       </div>
     </section>
   );
 }
-function TrustStat({ icon, label }: { icon: React.ReactNode; label: string }) {
+
+/* ════════════════════════════════════════════════════════════
+   TICKER — signature mileage marquee
+   ════════════════════════════════════════════════════════════ */
+function Ticker() {
+  const items = [
+    "MILE 6,283 N ST RD 15",
+    `LEESBURG · IN ${BUSINESS.address.zip}`,
+    `EST ${new Date().getFullYear() - BUSINESS.yearsInBusiness}`,
+    `★ ${BUSINESS.rating} / 5 · ${BUSINESS.reviewCount}+ REVIEWS`,
+    "ALL MAKES SERVICED",
+    "MOTORHOMES · 5TH WHEELS · TRAVEL TRAILERS · BOATS",
+    "KOSCIUSKO & ELKHART COUNTY",
+    "BOOKING SPRING PICKUP PREP NOW",
+  ];
   return (
-    <div className="flex items-center justify-center gap-2 text-muted-foreground">
-      {icon}
-      <span className="font-medium text-foreground">{label}</span>
+    <div className="relative border-y-2 border-ink bg-ink text-cream">
+      <Marquee
+        className="py-4 font-mono text-xs uppercase tracking-[0.28em]"
+        items={items.map((s) => (
+          <span key={s} className="whitespace-nowrap">{s}</span>
+        ))}
+      />
+      <div className="pointer-events-none absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-ink to-transparent" />
+      <div className="pointer-events-none absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-ink to-transparent" />
     </div>
   );
 }
 
-// ---------- Services ----------
+/* ════════════════════════════════════════════════════════════
+   SERVICES — numbered service plates
+   ════════════════════════════════════════════════════════════ */
 function Services() {
   const items = [
     {
-      icon: <Wrench className="h-5 w-5" />,
+      n: "01",
+      icon: <Wrench />,
       title: "Repair",
       body:
-        "Slide-outs, awnings, roofs, plumbing, electrical, appliances. Diagnostics straight talk — no upsells.",
+        "Slide-outs, awnings, roofs, plumbing, electrical, appliances. Diagnosed straight, fixed right.",
     },
     {
-      icon: <Gauge className="h-5 w-5" />,
+      n: "02",
+      icon: <Gauge />,
       title: "Maintenance",
       body:
-        "Seasonal service, pre-trip inspections, manufacturer-spec mileage service, winterize/de-winterize.",
+        "Seasonal service, pre-trip inspections, manufacturer-spec mileage service, winterize & de-winterize.",
     },
     {
-      icon: <KeyRound className="h-5 w-5" />,
+      n: "03",
+      icon: <KeyRound />,
       title: "Storage",
       body:
-        "Secured outdoor RV & boat storage with optional pickup-prep service before every trip.",
+        "Secured outdoor RV & boat storage with the signature pickup-prep service before every trip.",
     },
     {
-      icon: <Truck className="h-5 w-5" />,
+      n: "04",
+      icon: <Truck />,
       title: "Major Work",
       body:
         "Insurance claims, collision, body & fiberglass, delamination, full repaints and decal work.",
     },
   ];
   return (
-    <section id="services" className="border-b">
-      <div className="container-wide py-20">
-        <div className="mx-auto max-w-2xl text-center">
-          <div className="text-xs font-semibold uppercase tracking-widest text-primary">
-            What We Do
-          </div>
-          <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">
-            A full-service RV shop — and the only one that preps your rig before you pick it up.
+    <section id="services" className="relative bg-paper bg-grain">
+      <div className="container-wide py-24 lg:py-32">
+        <Reveal className="mx-auto max-w-3xl text-center">
+          <Eyebrow number="No. 02" className="justify-center">
+            The Service Bureau
+          </Eyebrow>
+          <h2 className="mt-7 font-display text-[clamp(2.5rem,5.2vw,4.5rem)] font-semibold leading-[1.02] tracking-tight">
+            Every wrench you need.{" "}
+            <span className="italic text-garage">One shop.</span>
           </h2>
-        </div>
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <p className="mt-5 text-lg text-ink/70">
+            We work on every make and model — and we&apos;re the only ones around
+            here that prep your rig before you pick it up.
+          </p>
+        </Reveal>
+
+        <RevealGroup className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {items.map((item) => (
-            <Card key={item.title} className="border-2 transition-all hover:border-primary/30 hover:shadow-md">
-              <CardContent className="p-6">
-                <div className="grid h-11 w-11 place-items-center rounded-lg bg-primary text-primary-foreground shadow-sm">
-                  {item.icon}
-                </div>
-                <h3 className="mt-4 text-lg font-semibold">{item.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{item.body}</p>
-              </CardContent>
-            </Card>
+            <RevealItem key={item.n}>
+              <ServicePlate {...item} />
+            </RevealItem>
           ))}
-        </div>
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-          <Button asChild variant="outline" size="lg">
-            <Link href="/services">
-              See all services <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
+        </RevealGroup>
+
+        <Reveal delay={0.3} className="mt-12 flex justify-center">
+          <StampButton href="/services" variant="ink" size="md">
+            See the full menu
+            <ArrowRight />
+          </StampButton>
+        </Reveal>
       </div>
     </section>
   );
 }
 
-// ---------- Storage Spotlight ----------
-function StorageSpotlight() {
+function ServicePlate({
+  n,
+  icon,
+  title,
+  body,
+}: {
+  n: string;
+  icon: React.ReactNode;
+  title: string;
+  body: string;
+}) {
   return (
-    <section id="storage" className="border-b bg-secondary/30">
-      <div className="container-wide grid gap-12 py-20 md:grid-cols-2 md:items-center">
-        <div className="space-y-5">
-          <Badge className="bg-primary/10 text-primary">Why customers stay</Badge>
-          <h2 className="font-display text-3xl font-bold md:text-4xl">
-            Park it. Forget it. Pick it up trip-ready.
-          </h2>
-          <p className="text-muted-foreground">
-            Joe’s rule: just give us a heads-up and we’ll have your rig ready to
-            roll the day you arrive. No more scrambling the night before your
-            trip wondering if the tires are flat or the battery is dead.
-          </p>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {BUSINESS.storageFeatures.map((f) => (
-              <div key={f} className="flex items-start gap-2 rounded-lg border bg-background p-3">
-                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" />
-                <span className="text-sm">{f}</span>
-              </div>
-            ))}
-          </div>
-          <div className="flex flex-wrap gap-3 pt-2">
-            <Button asChild size="lg">
-              <Link href="/storage">
-                See storage options <ArrowRight className="h-4 w-4" />
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="outline">
-              <Link href="/contact?topic=storage">Reserve a spot</Link>
-            </Button>
-          </div>
-        </div>
-        <div className="grid gap-3 rounded-2xl border-2 border-foreground/5 bg-background p-5 shadow-lg">
-          <div className="flex items-center justify-between border-b pb-3">
-            <div>
-              <div className="text-sm font-semibold">Pickup-prep checklist</div>
-              <div className="text-xs text-muted-foreground">
-                Just tap what you need before your trip.
-              </div>
-            </div>
-            <Badge variant="success">Included</Badge>
-          </div>
-          {[
-            { l: "Tires aired to manufacturer spec", icon: <Gauge className="h-4 w-4" /> },
-            { l: "House batteries tested + topped off", icon: <BatteryCharging className="h-4 w-4" /> },
-            { l: "Fresh tank filled & sanitized", icon: <Droplets className="h-4 w-4" /> },
-            { l: "Propane topped off (just pay fill cost)", icon: <Sparkles className="h-4 w-4" /> },
-            { l: "Slides cycled & sealed", icon: <CalendarCheck2 className="h-4 w-4" /> },
-            { l: "Exterior wash & dry", icon: <Sparkles className="h-4 w-4" /> },
-          ].map((row) => (
-            <div key={row.l} className="flex items-center gap-3 rounded-md border bg-secondary/40 px-3 py-2.5">
-              <span className="text-primary">{row.icon}</span>
-              <span className="text-sm font-medium">{row.l}</span>
-              <CheckCircle2 className="ml-auto h-4 w-4 text-success" />
-            </div>
-          ))}
-          <p className="pt-2 text-center text-xs text-muted-foreground">
-            Request these directly from the Customer Portal once you’re a storage customer.
-          </p>
-        </div>
+    <div className="group relative h-full overflow-hidden border-2 border-ink bg-cream p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-[6px_6px_0_var(--ink)]">
+      <div className="flex items-start justify-between">
+        <span className="font-display text-5xl font-bold leading-none text-sand-dark transition-colors group-hover:text-garage">
+          {n}
+        </span>
+        <span className="grid h-10 w-10 place-items-center rounded-full bg-ink text-cream [&_svg]:size-4">
+          {icon}
+        </span>
       </div>
-    </section>
+      <h3 className="mt-8 font-display text-2xl font-semibold tracking-tight">{title}</h3>
+      <div className="mt-3 h-px w-12 bg-garage" />
+      <p className="mt-4 text-sm leading-relaxed text-ink/75">{body}</p>
+    </div>
   );
 }
 
-// ---------- How it Works ----------
-function HowItWorks() {
-  const steps = [
-    {
-      n: 1,
-      title: "Reach out",
-      body:
-        "Call Joe, drop a message through the form, or submit a request from your portal if you’re already with us.",
-    },
-    {
-      n: 2,
-      title: "Diagnose & quote",
-      body:
-        "We diagnose, photograph anything important, and send you a clear written quote. No hidden line items.",
-    },
-    {
-      n: 3,
-      title: "Approve",
-      body: "Approve right from your phone. We order parts and slot it into the calendar.",
-    },
-    {
-      n: 4,
-      title: "Pick it up road-ready",
-      body: "We’ll text when it’s done. Tires, batteries, fluids — handled.",
-    },
+/* ════════════════════════════════════════════════════════════
+   STORAGE SPOTLIGHT — the differentiator, with typewriter list
+   ════════════════════════════════════════════════════════════ */
+function StorageSpotlight() {
+  const prep = [
+    { l: "Tires aired to spec", icon: <Gauge /> },
+    { l: "Battery test & top-off", icon: <BatteryCharging /> },
+    { l: "Fresh tank filled & sanitized", icon: <Droplets /> },
+    { l: "Propane topped off", icon: <Sparkles /> },
+    { l: "Slides cycled & sealed", icon: <CalendarCheck2 /> },
+    { l: "Exterior wash & dry", icon: <Sparkles /> },
   ];
   return (
-    <section className="border-b">
-      <div className="container-wide py-20">
-        <div className="mx-auto max-w-2xl text-center">
-          <div className="text-xs font-semibold uppercase tracking-widest text-primary">How it works</div>
-          <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">
-            Straightforward from intake to handoff
-          </h2>
-        </div>
-        <div className="mt-12 grid gap-6 md:grid-cols-4">
-          {steps.map((s) => (
-            <div key={s.n} className="relative rounded-xl border bg-background p-6">
-              <div className="grid h-10 w-10 place-items-center rounded-full bg-primary font-bold text-primary-foreground">
-                {s.n}
-              </div>
-              <h3 className="mt-4 text-lg font-semibold">{s.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{s.body}</p>
+    <section id="storage" className="relative bg-ink text-cream bg-grain bg-grain-strong">
+      <div className="container-wide grid gap-14 py-24 lg:grid-cols-12 lg:gap-16 lg:py-32">
+        <div className="lg:col-span-6">
+          <Reveal>
+            <Eyebrow number="No. 03" className="text-cream/70">
+              Why customers stay
+            </Eyebrow>
+          </Reveal>
+
+          <Reveal delay={0.05}>
+            <h2 className="mt-6 font-display text-[clamp(2.5rem,5.8vw,5.5rem)] font-semibold leading-[0.98] tracking-tight">
+              Park it.{" "}
+              <span className="italic text-sand-dark">Forget it.</span>{" "}
+              Pick it up <span className="text-garage">trip-ready.</span>
+            </h2>
+          </Reveal>
+
+          <Reveal delay={0.15}>
+            <p className="mt-7 max-w-lg text-lg text-cream/75">
+              Joe&apos;s rule: just give us a heads-up before your trip and your
+              rig will be aired, charged, topped off, and washed the day you
+              arrive. No more scrambling the night before.
+            </p>
+          </Reveal>
+
+          <Reveal delay={0.3} className="mt-10">
+            <div className="flex flex-wrap items-center gap-4">
+              <StampButton href="/storage" variant="garage" size="lg">
+                See storage options
+                <ArrowRight />
+              </StampButton>
+              <StampButton
+                href="/contact?topic=storage"
+                variant="cream"
+                size="lg"
+                className="border-cream bg-transparent text-cream hover:bg-cream hover:text-ink"
+              >
+                Reserve a spot
+              </StampButton>
             </div>
-          ))}
+          </Reveal>
+        </div>
+
+        <div className="lg:col-span-6">
+          <Reveal delay={0.2} y={48}>
+            <div className="relative">
+              <div className="absolute -inset-3 border-2 border-cream/15" />
+              <div className="relative bg-cream p-7 text-ink shadow-[12px_12px_0_var(--garage)] md:p-10">
+                <div className="flex items-start justify-between gap-3 border-b border-ink/15 pb-5">
+                  <div>
+                    <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-ink/55">
+                      Service Ticket No. JSC-PRP-01
+                    </div>
+                    <div className="mt-1 font-display text-2xl font-semibold">
+                      Pickup-Prep Checklist
+                    </div>
+                  </div>
+                  <StampBadge variant="garage" rotation={6}>
+                    Included
+                  </StampBadge>
+                </div>
+                <ul className="mt-6 grid gap-3">
+                  {prep.map((row, i) => (
+                    <li
+                      key={row.l}
+                      className="flex items-center gap-4 border-b border-dashed border-ink/15 pb-3 last:border-0 last:pb-0"
+                    >
+                      <span className="font-mono text-xs text-ink/40">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span className="grid h-8 w-8 place-items-center rounded-full bg-sand text-ink [&_svg]:size-3.5">
+                        {row.icon}
+                      </span>
+                      <span className="flex-1 text-[15px] font-medium">{row.l}</span>
+                      <CheckCircle2 className="h-4 w-4 text-patina" />
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-6 text-center font-mono text-[10px] uppercase tracking-[0.22em] text-ink/50">
+                  Request from your portal · 48 hours notice
+                </p>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </div>
     </section>
   );
 }
 
-// ---------- Testimonials ----------
+/* ════════════════════════════════════════════════════════════
+   HOW IT WORKS — engraved ritual plates
+   ════════════════════════════════════════════════════════════ */
+function HowItWorks() {
+  const steps = [
+    { n: "I", title: "Reach out", body: "Call Joe, drop a message, or submit from your portal." },
+    { n: "II", title: "Diagnose & quote", body: "We diagnose, photograph, send a clear written quote." },
+    { n: "III", title: "Approve", body: "Approve from your phone. Parts ordered, slot on the calendar." },
+    { n: "IV", title: "Pick it up ready", body: "We text when it's done. Tires, batteries, fluids — handled." },
+  ];
+  return (
+    <section className="relative bg-cream bg-grain">
+      <div className="container-wide py-24 lg:py-32">
+        <Reveal className="mx-auto max-w-3xl text-center">
+          <Eyebrow number="No. 04" className="justify-center">
+            The Ritual
+          </Eyebrow>
+          <h2 className="mt-6 font-display text-[clamp(2.5rem,5.2vw,4.5rem)] font-semibold leading-[1.02] tracking-tight">
+            Straightforward from <span className="italic">intake to handoff</span>
+          </h2>
+        </Reveal>
+
+        <Reveal delay={0.15} className="mt-14">
+          <OrnamentalRule variant="diamond" className="mx-auto max-w-3xl text-ink/30" />
+        </Reveal>
+
+        <RevealGroup className="mt-12 grid gap-x-6 gap-y-12 md:grid-cols-2 lg:grid-cols-4">
+          {steps.map((s, i) => (
+            <RevealItem key={s.n}>
+              <div className="relative">
+                <span className="absolute -top-2 -left-1 font-display text-[8rem] font-bold leading-none text-sand-dark/40 select-none">
+                  {s.n}
+                </span>
+                <div className="relative pt-10">
+                  <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-garage">
+                    Step {i + 1} of 4
+                  </div>
+                  <h3 className="mt-2 font-display text-2xl font-semibold">{s.title}</h3>
+                  <div className="mt-3 h-px w-10 bg-ink/30" />
+                  <p className="mt-4 text-[15px] leading-relaxed text-ink/75">{s.body}</p>
+                </div>
+              </div>
+            </RevealItem>
+          ))}
+        </RevealGroup>
+      </div>
+    </section>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════
+   TESTIMONIALS — field reports / handwritten cards
+   ════════════════════════════════════════════════════════════ */
 function Testimonials() {
   const items = [
     {
       name: "Tom B.",
       city: "Warsaw, IN",
       body:
-        "Joe is the real deal. Honest, fair, and never tries to upsell. They’ve stored our 5th wheel for four winters and we’ve never once had to mess with it on pickup day.",
+        "Joe is the real deal. Honest, fair, never tries to upsell. They've stored our 5th wheel for four winters — never once had to mess with it on pickup day.",
     },
     {
       name: "Linda H.",
       city: "Syracuse, IN",
       body:
-        "I called every shop within an hour of us. JSC was the only one that picked up the phone, gave me a real answer, and got us in that week. Slide motor fixed for less than the quote.",
+        "Called every shop within an hour. JSC was the only one that picked up, gave a real answer, and got us in that week. Slide motor fixed for less than the quote.",
     },
     {
       name: "Greg O.",
       city: "North Webster, IN",
       body:
-        "Stored my Sea Ray here three seasons running. Trailer gets pulled to the front for pickup, charged, hosed off. Best decision I made.",
+        "Stored my Sea Ray here three seasons running. Trailer gets pulled to the front for pickup, charged, hosed off. Best decision I've made on the lake.",
     },
   ];
   return (
-    <section className="border-b bg-radial-grid">
-      <div className="container-wide py-20">
-        <div className="mx-auto max-w-2xl text-center">
-          <div className="text-xs font-semibold uppercase tracking-widest text-primary">
-            Customers
-          </div>
-          <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">
-            People around the lakes trust us with their rigs.
+    <section className="relative bg-sand/40 bg-grain">
+      <div className="container-wide py-24 lg:py-32">
+        <Reveal className="mx-auto max-w-3xl text-center">
+          <Eyebrow number="No. 05" className="justify-center">
+            Field Reports
+          </Eyebrow>
+          <h2 className="mt-6 font-display text-[clamp(2.5rem,5.2vw,4.5rem)] font-semibold leading-[1.02] tracking-tight">
+            People around the lakes <span className="italic text-garage">trust us</span> with their rigs.
           </h2>
-        </div>
-        <div className="mt-12 grid gap-5 md:grid-cols-3">
-          {items.map((t) => (
-            <Card key={t.name} className="border-2">
-              <CardContent className="p-6">
-                <Quote className="h-6 w-6 text-primary" />
-                <p className="mt-3 text-sm leading-relaxed">{t.body}</p>
-                <div className="mt-5 flex items-center gap-3 border-t pt-4">
-                  <div className="grid h-9 w-9 place-items-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
-                    {t.name.split(" ").map((s) => s[0]).join("")}
+        </Reveal>
+
+        <RevealGroup className="mt-16 grid gap-6 md:grid-cols-3" stagger={0.12}>
+          {items.map((t, i) => (
+            <RevealItem key={t.name}>
+              <article
+                className="relative h-full bg-paper p-8 shadow-[8px_8px_0_rgba(26,22,20,0.85)]"
+                style={{ transform: `rotate(${[-1.4, 0.8, -0.6][i]}deg)` }}
+              >
+                <div className="absolute -top-3 left-6 flex items-center gap-1 bg-paper px-3 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-ink/60">
+                  <Star className="h-3 w-3 fill-brass text-brass" />
+                  <Star className="h-3 w-3 fill-brass text-brass" />
+                  <Star className="h-3 w-3 fill-brass text-brass" />
+                  <Star className="h-3 w-3 fill-brass text-brass" />
+                  <Star className="h-3 w-3 fill-brass text-brass" />
+                </div>
+                <p className="font-display text-xl italic leading-snug text-ink">
+                  &ldquo;{t.body}&rdquo;
+                </p>
+                <div className="mt-6 flex items-center gap-3 border-t border-ink/15 pt-5">
+                  <div className="grid h-10 w-10 place-items-center rounded-full border-2 border-ink font-display text-sm font-bold">
+                    {t.name.replace(".", "").split(" ").map((s) => s[0]).join("")}
                   </div>
                   <div>
-                    <div className="text-sm font-semibold">{t.name}</div>
-                    <div className="text-xs text-muted-foreground">{t.city}</div>
-                  </div>
-                  <div className="ml-auto flex gap-0.5">
-                    {[1, 2, 3, 4, 5].map((i) => (
-                      <Star key={i} className="h-3.5 w-3.5 fill-warning text-warning" />
-                    ))}
+                    <div className="font-display text-base font-semibold">{t.name}</div>
+                    <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-ink/55">
+                      {t.city}
+                    </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </article>
+            </RevealItem>
           ))}
-        </div>
+        </RevealGroup>
       </div>
     </section>
   );
 }
 
-// ---------- CTA Band ----------
+/* ════════════════════════════════════════════════════════════
+   CTA BAND — tear-off service ticket
+   ════════════════════════════════════════════════════════════ */
 function CtaBand() {
   return (
-    <section className="border-b bg-foreground text-background">
-      <div className="container-wide grid gap-12 py-16 md:grid-cols-[1.1fr_1fr] md:items-center">
-        <div>
-          <h2 className="font-display text-3xl font-bold md:text-4xl">
-            Tell us what your rig needs — we’ll take it from there.
-          </h2>
-          <p className="mt-3 max-w-xl text-background/70">
-            Quick form, real human reply. Joe or Tina will follow up within one
-            business day with availability and a ballpark.
-          </p>
-          <div className="mt-6 flex flex-wrap items-center gap-3">
-            <Button asChild variant="default" size="lg">
-              <a href={`tel:${BUSINESS.phoneRaw}`}>
-                <Phone className="h-4 w-4" />
-                Call {BUSINESS.phone}
-              </a>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-              className="border-background/30 bg-transparent text-background hover:bg-background/10"
-            >
-              <a href={`mailto:${BUSINESS.email}`}>Email Joe</a>
-            </Button>
-          </div>
-        </div>
-        <Card className="border-foreground/10 bg-background text-foreground shadow-2xl">
-          <CardContent className="p-6">
-            <h3 className="text-lg font-semibold">Send a request</h3>
-            <p className="mt-1 text-sm text-muted-foreground">
-              We never share your info. We never use auto-bots.
+    <section className="relative overflow-hidden bg-ink text-cream bg-grain bg-grain-strong">
+      <div className="container-wide grid gap-12 py-24 lg:grid-cols-12 lg:gap-16 lg:py-32">
+        <div className="lg:col-span-6">
+          <Reveal>
+            <Eyebrow number="No. 06" className="text-cream/70">
+              The handshake
+            </Eyebrow>
+          </Reveal>
+          <Reveal delay={0.05}>
+            <h2 className="mt-6 font-display text-[clamp(2.8rem,6vw,5.5rem)] font-semibold leading-[0.98] tracking-tight">
+              Tell us what your rig needs.{" "}
+              <span className="italic text-garage">We&apos;ll take it from there.</span>
+            </h2>
+          </Reveal>
+          <Reveal delay={0.15}>
+            <p className="mt-7 max-w-md text-lg text-cream/75">
+              Quick form, real human reply. Joe or Tina will follow up within one
+              business day with availability and a ballpark.
             </p>
-            <div className="mt-4">
-              <LeadForm />
+          </Reveal>
+          <Reveal delay={0.25}>
+            <div className="mt-9 flex flex-wrap items-center gap-4">
+              <StampButton
+                href={`tel:${BUSINESS.phoneRaw}`}
+                external
+                variant="garage"
+                size="lg"
+              >
+                <Phone />
+                {BUSINESS.phone}
+              </StampButton>
+              <StampButton
+                href={`mailto:${BUSINESS.email}`}
+                external
+                variant="cream"
+                size="lg"
+                className="border-cream bg-transparent text-cream hover:bg-cream hover:text-ink"
+              >
+                Email Joe
+              </StampButton>
             </div>
-          </CardContent>
-        </Card>
+          </Reveal>
+        </div>
+
+        <div className="lg:col-span-6">
+          <Reveal delay={0.25} y={32}>
+            <div className="edge-perforated-top mt-2 bg-cream text-ink shadow-[12px_12px_0_var(--garage)]">
+              <div className="p-7 md:p-9">
+                <div className="flex items-center justify-between border-b border-dashed border-ink/30 pb-4">
+                  <div>
+                    <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-ink/55">
+                      Service Request Form
+                    </div>
+                    <div className="mt-1 font-display text-xl font-semibold">
+                      Send to the shop
+                    </div>
+                  </div>
+                  <StampBadge variant="ink" rotation={6}>
+                    No bots · No spam
+                  </StampBadge>
+                </div>
+                <div className="mt-6">
+                  <LeadForm compact />
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </div>
       </div>
     </section>
   );
 }
 
-// ---------- Contact Strip ----------
+/* ════════════════════════════════════════════════════════════
+   CONTACT STRIP — three enameled signs
+   ════════════════════════════════════════════════════════════ */
 function ContactStrip() {
   return (
-    <section>
-      <div className="container-wide grid gap-6 py-12 md:grid-cols-3">
-        <Card>
-          <CardContent className="p-6">
-            <MapPin className="h-5 w-5 text-primary" />
-            <div className="mt-3 text-sm font-semibold">Visit the shop</div>
-            <p className="mt-1 text-sm text-muted-foreground">{formatAddressLine()}</p>
-            <p className="text-xs text-muted-foreground">{BUSINESS.address.landmark}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <Phone className="h-5 w-5 text-primary" />
-            <div className="mt-3 text-sm font-semibold">Talk to Joe</div>
-            <p className="mt-1 text-sm text-muted-foreground">{BUSINESS.phone}</p>
-            <p className="text-xs text-muted-foreground">{BUSINESS.email}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <CalendarCheck2 className="h-5 w-5 text-primary" />
-            <div className="mt-3 text-sm font-semibold">Shop hours</div>
-            <p className="mt-1 text-sm text-muted-foreground">Mon–Fri 8:00 AM – 5:00 PM</p>
-            <p className="text-xs text-muted-foreground">Saturday by appointment · Closed Sunday</p>
-          </CardContent>
-        </Card>
+    <section className="bg-cream bg-grain">
+      <div className="container-wide grid gap-5 py-16 md:grid-cols-3">
+        <ContactSign
+          icon={<MapPin />}
+          label="Visit the shop"
+          line1={formatAddressLine()}
+          line2={BUSINESS.address.landmark}
+        />
+        <ContactSign
+          icon={<Phone />}
+          label="Talk to Joe"
+          line1={BUSINESS.phone}
+          line2={BUSINESS.email}
+        />
+        <ContactSign
+          icon={<CalendarCheck2 />}
+          label="Shop hours"
+          line1="Mon–Fri · 8:00–5:00"
+          line2="Saturday by appointment"
+        />
       </div>
     </section>
+  );
+}
+
+function ContactSign({
+  icon,
+  label,
+  line1,
+  line2,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  line1: string;
+  line2: string;
+}) {
+  return (
+    <Reveal>
+      <div className="group flex h-full items-start gap-4 border-2 border-ink/85 bg-paper p-6 transition-all hover:-translate-y-0.5 hover:border-garage hover:shadow-[4px_4px_0_var(--ink)]">
+        <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-ink text-cream group-hover:bg-garage [&_svg]:size-4">
+          {icon}
+        </div>
+        <div>
+          <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-ink/55">
+            {label}
+          </div>
+          <div className="mt-1 font-display text-lg font-semibold leading-tight">
+            {line1}
+          </div>
+          <div className="mt-1 text-sm text-ink/60">{line2}</div>
+        </div>
+      </div>
+    </Reveal>
   );
 }
