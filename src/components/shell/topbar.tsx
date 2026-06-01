@@ -16,7 +16,7 @@ export async function Topbar({
   const user = await getCurrentUser();
   if (!user) return null;
   return (
-    <header className="sticky top-0 z-20 flex h-16 items-center justify-between gap-3 border-b bg-background/85 px-5 backdrop-blur-lg">
+    <header className="sticky top-0 z-20 flex h-16 items-center justify-between gap-3 border-b bg-background/85 pl-16 pr-3 backdrop-blur-lg md:px-5">
       <div>
         <h1 className="font-display text-lg font-bold leading-tight">{title}</h1>
         {subtitle && (
