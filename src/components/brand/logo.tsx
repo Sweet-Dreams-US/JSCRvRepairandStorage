@@ -23,7 +23,7 @@ export function Logo({ className, variant = "full", invert = false }: LogoProps)
             JSC
           </span>
           <span className="font-mono text-[10px] uppercase tracking-[0.32em]" style={{ color: ink }}>
-            RV · Repair
+            RV · Service
           </span>
         </div>
       </div>
@@ -38,7 +38,7 @@ export function Logo({ className, variant = "full", invert = false }: LogoProps)
           className="font-display text-xl font-extrabold tracking-tight"
           style={{ color: red }}
         >
-          JSC <span className="font-display italic font-medium opacity-90">RV Repair</span>
+          JSC <span className="font-display italic font-medium opacity-90">RV Service</span>
         </span>
         <span
           className="mt-1 font-mono text-[9px] uppercase tracking-[0.28em]"

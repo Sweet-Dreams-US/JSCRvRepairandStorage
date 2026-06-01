@@ -10,6 +10,7 @@ import {
   CreditCard,
   FileText,
   Home,
+  KeyRound,
   LineChart,
   MapPinned,
   Menu,
@@ -41,6 +42,7 @@ const ICONS: Record<string, LucideIcon> = {
   "user-cog": UserCog,
   "line-chart": LineChart,
   wallet: Wallet,
+  "key-round": KeyRound,
 };
 
 export type SidebarItem = {

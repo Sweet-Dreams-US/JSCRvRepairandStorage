@@ -59,7 +59,7 @@ export default function AboutPage() {
             <Reveal delay={0.6}>
               <p className="mt-7 max-w-xl text-lg leading-relaxed text-ink/80">
                 I&apos;ve been turning wrenches on RVs since I bought my first
-                project trailer in college. JSC RV Repair is the shop I always
+                project trailer in college. JSC RV Service is the shop I always
                 wished was around when I started:{" "}
                 <span className="font-display italic text-ink">
                   honest people, fair prices, and a real understanding

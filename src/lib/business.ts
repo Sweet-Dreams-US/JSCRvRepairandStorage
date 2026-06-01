@@ -1,14 +1,16 @@
 /**
- * Single source of truth for JSC RV Repair business facts.
+ * Single source of truth for JSC RV Service business facts.
  * Update here to propagate across the site.
  */
 export const BUSINESS = {
-  name: "JSC RV Repair",
-  tagline: "RV Service, Storage & Maintenance — Built Around You",
+  name: "JSC RV Service",
+  shortName: "JSC",
+  tagline: "Service · Storage · Rentals — Built Around You",
   owner: "Joe Crawford",
   ownerShort: "Joe",
   about:
-    "We're your local RV service experts, here to keep your rig road-ready. From routine maintenance to major repairs, we work on all makes and models — motorhomes, travel trailers, fifth wheels, boats, and more.",
+    "Your local one-stop RV shop. We service every make and model, store RVs and boats on a secured lot, and rent out a small fleet of road-ready rigs — so whether you own one, store one, or just need one for the weekend, we've got you covered.",
+  offerings: ["RV Service", "RV Storage", "Boat Storage", "RV Rentals"] as const,
   phone: "(574) 453-1573",
   phoneRaw: "+15744531573",
   email: "joe@jscrvrepair.com",

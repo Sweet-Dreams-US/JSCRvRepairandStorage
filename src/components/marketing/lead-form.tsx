@@ -58,6 +58,7 @@ export function LeadForm({ compact = false }: { compact?: boolean }) {
               <SelectItem value="repair">RV Repair</SelectItem>
               <SelectItem value="maintenance">Maintenance / Service</SelectItem>
               <SelectItem value="storage">Storage</SelectItem>
+              <SelectItem value="rental">RV Rental</SelectItem>
               <SelectItem value="quote">Need a Quote</SelectItem>
               <SelectItem value="other">Something Else</SelectItem>
             </SelectContent>

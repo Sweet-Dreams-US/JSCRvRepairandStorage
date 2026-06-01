@@ -34,7 +34,7 @@ export default function LoginPage() {
   return (
     <div className="grid min-h-screen md:grid-cols-2">
       <div className="hidden bg-foreground p-12 text-background md:flex md:flex-col md:justify-between">
-        <Link href="/" aria-label="JSC RV Repair home">
+        <Link href="/" aria-label="JSC RV Service home">
           <Logo invert />
         </Link>
         <div>
@@ -61,13 +61,13 @@ export default function LoginPage() {
           </ul>
         </div>
         <div className="text-xs text-background/60">
-          © {new Date().getFullYear()} JSC RV Repair · Leesburg, IN
+          © {new Date().getFullYear()} JSC RV Service · Leesburg, IN
         </div>
       </div>
 
       <div className="flex flex-col bg-background p-6 md:p-12">
         <div className="md:hidden">
-          <Link href="/" aria-label="JSC RV Repair home">
+          <Link href="/" aria-label="JSC RV Service home">
             <Logo />
           </Link>
         </div>

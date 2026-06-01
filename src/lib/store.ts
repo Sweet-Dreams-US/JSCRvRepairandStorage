@@ -33,6 +33,7 @@ import type {
   PickupPrepRequest,
   PickupRequest,
   Quote,
+  Rental,
   Rv,
   Shift,
   StaffMember,
@@ -59,6 +60,7 @@ type DB = {
   timeEntries: TimeEntry[];
   expenses: Expense[];
   activity: ActivityEvent[];
+  rentals: Rental[];
 };
 
 const g = globalThis as unknown as { __jsc_db?: DB };
@@ -80,7 +82,14 @@ if (!g.__jsc_db) {
     timeEntries: structuredClone(TIME_ENTRIES),
     expenses: structuredClone(EXPENSES),
     activity: structuredClone(ACTIVITY),
+    rentals: [], // Joe seeds these from the admin panel
   };
+}
+
+// Self-heal: if the dev server was started before a new collection existed,
+// make sure it gets added on the fly so we don't have to restart the process.
+if (g.__jsc_db && !Array.isArray(g.__jsc_db.rentals)) {
+  g.__jsc_db.rentals = [];
 }
 
 const db = g.__jsc_db!;
@@ -254,7 +263,53 @@ export const store = {
       .slice(0, limit);
   },
 
+  // ────────────── Rentals ──────────────
+  listRentals() {
+    return [...db.rentals].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  },
+  publicRentals() {
+    // Only the listings customers should see
+    return [...db.rentals]
+      .filter((r) => r.status === "available" || r.status === "booked")
+      .sort((a, b) => a.nightlyRate - b.nightlyRate);
+  },
+  getRental(id: string) {
+    return db.rentals.find((r) => r.id === id);
+  },
+
   // ---------- WRITES ----------
+  // ────────────── Rental writes ──────────────
+  createRental(
+    input: Omit<Rental, "id" | "createdAt" | "updatedAt" | "status"> & {
+      status?: Rental["status"];
+    },
+  ) {
+    const now = new Date().toISOString();
+    const rental: Rental = {
+      ...input,
+      id: `rental-${nanoid(6)}`,
+      status: input.status ?? "available",
+      createdAt: now,
+      updatedAt: now,
+    };
+    db.rentals.unshift(rental);
+    return rental;
+  },
+
+  updateRental(id: string, patch: Partial<Omit<Rental, "id" | "createdAt">>) {
+    const rental = db.rentals.find((r) => r.id === id);
+    if (!rental) return null;
+    Object.assign(rental, patch, { updatedAt: new Date().toISOString() });
+    return rental;
+  },
+
+  deleteRental(id: string) {
+    const i = db.rentals.findIndex((r) => r.id === id);
+    if (i < 0) return false;
+    db.rentals.splice(i, 1);
+    return true;
+  },
+
   createLead(input: Omit<Lead, "id" | "status" | "createdAt">) {
     const lead: Lead = {
       ...input,

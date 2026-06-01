@@ -1,4 +1,4 @@
-// Domain types for JSC RV Repair platform.
+// Domain types for JSC RV Service platform.
 
 export type Role = "customer" | "tech" | "manager" | "admin";
 
@@ -242,12 +242,37 @@ export interface Lead {
   email: string;
   phone: string;
   rvType?: RvType;
-  interest: "repair" | "storage" | "maintenance" | "quote" | "other";
+  interest: "repair" | "storage" | "maintenance" | "rental" | "quote" | "other";
   message: string;
   source: "website" | "facebook" | "referral" | "google" | "other";
   status: "new" | "contacted" | "scheduled" | "converted" | "lost";
   createdAt: string;
   assignedTo?: string;
+  rentalId?: string; // populated when a lead originates from a specific rental listing
+}
+
+// ────────────── RENTALS ──────────────
+export type RentalStatus = "available" | "booked" | "maintenance" | "retired";
+
+export interface Rental {
+  id: string;
+  name: string; // display name, e.g. "The Lakeside"
+  type: RvType;
+  year: number;
+  make: string;
+  model: string;
+  length: number; // feet
+  sleeps: number;
+  nightlyRate: number;
+  weeklyRate: number;
+  minNights: number;
+  securityDeposit: number;
+  status: RentalStatus;
+  description: string;
+  features: string[]; // ["Generator", "Solar", "Bunk beds"]
+  photoUrl?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type ShiftKind = "shop" | "lot" | "office" | "on-call";

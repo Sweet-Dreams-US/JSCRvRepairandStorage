@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {
+  Anchor,
   ArrowRight,
   BatteryCharging,
   CalendarCheck2,
@@ -82,9 +83,9 @@ function Hero() {
 
           <Reveal delay={0.95} y={20}>
             <p className="mt-9 max-w-xl text-lg leading-relaxed text-ink/80 md:text-xl">
-              Family-owned RV repair, storage &amp; maintenance just off St. Rd. 15.
-              From slide-out motors to full pre-trip prep, Joe and the crew treat
-              your rig like it&apos;s their own.
+              Family-owned RV service, storage &amp; rentals just off St. Rd. 15.
+              Whether you own one, store one, or need one for the weekend — Joe
+              and the crew treat every rig like it&apos;s their own.
             </p>
           </Reveal>
 
@@ -105,9 +106,9 @@ function Hero() {
             <ul className="mt-10 grid gap-y-2 text-sm text-ink/70 sm:grid-cols-2 sm:gap-x-6">
               {[
                 "Family-owned · Joe answers",
-                "Motorhomes · 5th wheels · TTs",
-                "Boat storage & spring launch",
-                "Insurance & major work welcome",
+                "Service · Storage · Rentals",
+                "Boats welcome too",
+                "Insurance & major work",
               ].map((line) => (
                 <li key={line} className="flex items-center gap-2.5">
                   <span className="h-1.5 w-1.5 rotate-45 bg-garage" />
@@ -127,7 +128,7 @@ function Hero() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/images/hero-shop.png"
-                  alt="The JSC RV Repair lot in Leesburg, Indiana"
+                  alt="The JSC RV Service lot in Leesburg, Indiana"
                   className="h-full w-full object-cover saturate-90 contrast-95"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-ink/55 via-transparent to-transparent" />
@@ -189,37 +190,45 @@ function Ticker() {
 }
 
 /* ════════════════════════════════════════════════════════════
-   SERVICES — numbered service plates
+   SERVICES — four-lane offering grid (Service / RV Storage / Boat Storage / Rentals)
    ════════════════════════════════════════════════════════════ */
 function Services() {
   const items = [
     {
       n: "01",
       icon: <Wrench />,
-      title: "Repair",
+      title: "RV Service",
       body:
-        "Slide-outs, awnings, roofs, plumbing, electrical, appliances. Diagnosed straight, fixed right.",
+        "Slide-outs, awnings, roofs, plumbing, electrical, appliances, brakes — plus routine maintenance, seasonal prep, and insurance work. Diagnosed straight. Fixed right.",
+      href: "/services",
+      cta: "See the menu",
     },
     {
       n: "02",
-      icon: <Gauge />,
-      title: "Maintenance",
+      icon: <KeyRound />,
+      title: "RV Storage",
       body:
-        "Seasonal service, pre-trip inspections, manufacturer-spec mileage service, winterize & de-winterize.",
+        "Secured outdoor storage for motorhomes, trailers, and fifth wheels. Signature pickup-prep included — tires, batteries, fluids, slides cycled before you arrive.",
+      href: "/storage",
+      cta: "Reserve a spot",
     },
     {
       n: "03",
-      icon: <KeyRound />,
-      title: "RV & Boat Storage",
+      icon: <Anchor />,
+      title: "Boat Storage",
       body:
-        "Secured outdoor storage for motorhomes, trailers, and boats — plus the signature pickup-prep before every trip and spring launch.",
+        "Winter haul-in for boats, pontoons, and cruisers from around Lake Wawasee. Spring launch and seasonal prep handled — show up to a launch-ready rig.",
+      href: "/storage#boats",
+      cta: "Store your boat",
     },
     {
       n: "04",
       icon: <Truck />,
-      title: "Major Work",
+      title: "RV Rentals",
       body:
-        "Insurance claims, collision, body & fiberglass, delamination, full repaints and decal work.",
+        "Borrow one of our road-ready rigs by the weekend or the week. Travel trailers and bunkhouses — perfect for a lake trip or a test-drive before you buy.",
+      href: "/rentals",
+      cta: "Browse rentals",
     },
   ];
   return (
@@ -227,15 +236,14 @@ function Services() {
       <div className="container-wide py-24 lg:py-32">
         <Reveal className="mx-auto max-w-3xl text-center">
           <Eyebrow number="No. 02" className="justify-center">
-            The Service Bureau
+            Everything for your rig
           </Eyebrow>
           <h2 className="mt-7 font-display text-[clamp(2.5rem,5.2vw,4.5rem)] font-semibold leading-[1.02] tracking-tight">
-            Every wrench you need.{" "}
-            <span className="italic text-garage">One shop.</span>
+            Service. Storage. <span className="italic text-garage">Rentals.</span>
           </h2>
           <p className="mt-5 text-lg text-ink/70">
-            We work on every make and model — and we&apos;re the only ones around
-            here that prep your rig before you pick it up.
+            Whether you own one, store one, or just need one for the weekend — we&apos;ve
+            got a lane for you. Four ways we keep Indiana on the road and on the lake.
           </p>
         </Reveal>
 
@@ -247,9 +255,13 @@ function Services() {
           ))}
         </RevealGroup>
 
-        <Reveal delay={0.3} className="mt-12 flex justify-center">
+        <Reveal delay={0.3} className="mt-12 flex flex-wrap justify-center gap-4">
           <StampButton href="/services" variant="ink" size="md">
-            See the full menu
+            See the service menu
+            <ArrowRight />
+          </StampButton>
+          <StampButton href="/rentals" variant="garage" size="md">
+            Browse the rental fleet
             <ArrowRight />
           </StampButton>
         </Reveal>
@@ -263,14 +275,21 @@ function ServicePlate({
   icon,
   title,
   body,
+  href,
+  cta,
 }: {
   n: string;
   icon: React.ReactNode;
   title: string;
   body: string;
+  href: string;
+  cta: string;
 }) {
   return (
-    <div className="group relative h-full overflow-hidden border-2 border-ink bg-cream p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-[6px_6px_0_var(--ink)]">
+    <Link
+      href={href}
+      className="group relative flex h-full flex-col overflow-hidden border-2 border-ink bg-cream p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-[6px_6px_0_var(--ink)]"
+    >
       <div className="flex items-start justify-between">
         <span className="font-display text-5xl font-bold leading-none text-sand-dark transition-colors group-hover:text-garage">
           {n}
@@ -281,8 +300,12 @@ function ServicePlate({
       </div>
       <h3 className="mt-8 font-display text-2xl font-semibold tracking-tight">{title}</h3>
       <div className="mt-3 h-px w-12 bg-garage" />
-      <p className="mt-4 text-sm leading-relaxed text-ink/75">{body}</p>
-    </div>
+      <p className="mt-4 flex-1 text-sm leading-relaxed text-ink/75">{body}</p>
+      <div className="mt-6 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.22em] text-ink/55 transition-colors group-hover:text-garage">
+        <span>{cta}</span>
+        <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
+      </div>
+    </Link>
   );
 }
 

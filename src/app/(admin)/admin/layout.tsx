@@ -22,6 +22,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     { href: "/admin/lot", label: "Storage Lot", icon: "map-pinned" },
     { href: "/admin/customers", label: "Customers", icon: "users" },
     { href: "/admin/rvs", label: "RVs", icon: "truck" },
+    { href: "/admin/rentals", label: "Rentals", icon: "key-round" },
     { href: "/admin/quotes", label: "Quotes", icon: "file-text" },
     { href: "/admin/invoices", label: "Invoices", icon: "credit-card" },
     { href: "/admin/messages", label: "Messages", icon: "message-square", badge: unreadThreads },

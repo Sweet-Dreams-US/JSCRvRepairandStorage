@@ -10,7 +10,7 @@ const leadSchema = z.object({
   email: z.string().email("Please enter a valid email"),
   phone: z.string().min(7, "Please enter a phone number"),
   rvType: z.string().optional(),
-  interest: z.enum(["repair", "storage", "maintenance", "quote", "other"]),
+  interest: z.enum(["repair", "storage", "maintenance", "rental", "quote", "other"]),
   message: z.string().min(5, "Tell us a bit about how we can help"),
   source: z.string().default("website"),
 });

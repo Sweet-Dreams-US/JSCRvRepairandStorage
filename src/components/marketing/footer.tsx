@@ -52,6 +52,7 @@ export function MarketingFooter() {
           <ul className="mt-4 grid gap-2.5 text-sm">
             <FooterLink href="/services">Services</FooterLink>
             <FooterLink href="/storage">Storage</FooterLink>
+            <FooterLink href="/rentals">Rentals</FooterLink>
             <FooterLink href="/about">About Joe</FooterLink>
             <FooterLink href="/contact">Contact</FooterLink>
             <FooterLink href="/login">Customer Portal</FooterLink>
@@ -99,7 +100,7 @@ export function MarketingFooter() {
       <div className="container-wide pb-10">
         <OrnamentalRule variant="compass" className="text-cream/30 mb-8" />
         <div className="flex flex-col items-start justify-between gap-3 font-mono text-[11px] uppercase tracking-[0.22em] text-cream/55 md:flex-row md:items-center">
-          <span>© {new Date().getFullYear()} JSC RV Repair · All rights reserved</span>
+          <span>© {new Date().getFullYear()} JSC RV Service · All rights reserved</span>
           <span className="flex items-center gap-2">
             <span className="h-1 w-1 rounded-full bg-garage" />
             Stamped &amp; serviced in Leesburg, Indiana — Est {new Date().getFullYear() - BUSINESS.yearsInBusiness}

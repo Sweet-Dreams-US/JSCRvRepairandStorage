@@ -1,4 +1,4 @@
-// Realistic seed data for the JSC RV Repair demo.
+// Realistic seed data for the JSC RV Service demo.
 // Dates are computed relative to "now" so the demo always feels fresh.
 
 import type {

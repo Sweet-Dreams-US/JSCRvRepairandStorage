@@ -11,8 +11,9 @@ import { cn } from "@/lib/utils";
 const nav = [
   { href: "/services", label: "Services", n: "01" },
   { href: "/storage", label: "Storage", n: "02" },
-  { href: "/about", label: "About Joe", n: "03" },
-  { href: "/contact", label: "Contact", n: "04" },
+  { href: "/rentals", label: "Rentals", n: "03" },
+  { href: "/about", label: "About Joe", n: "04" },
+  { href: "/contact", label: "Contact", n: "05" },
 ];
 
 export function MarketingHeader() {
@@ -34,7 +35,7 @@ export function MarketingHeader() {
       )}
     >
       <div className="container-bleed flex h-20 items-center justify-between gap-4">
-        <Link href="/" className="flex items-center" aria-label="JSC RV Repair home">
+        <Link href="/" className="flex items-center" aria-label="JSC RV Service home">
           <Logo />
         </Link>
 
