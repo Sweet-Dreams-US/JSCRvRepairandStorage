@@ -77,7 +77,7 @@ export default async function AdminDashboard() {
           />
           <StatBlock
             icon={<UserPlus className="h-4 w-4" />}
-            label="New leads"
+            label="New inquiries"
             value={stats.newLeads}
             sub="Awaiting first touch"
             href="/admin/leads"
@@ -200,7 +200,7 @@ export default async function AdminDashboard() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
-                <h2 className="font-display text-lg font-semibold">New leads</h2>
+                <h2 className="font-display text-lg font-semibold">New inquiries</h2>
                 <Button asChild size="sm" variant="ghost">
                   <Link href="/admin/leads">
                     Open <ArrowRight className="h-3.5 w-3.5" />

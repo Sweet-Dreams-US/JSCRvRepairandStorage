@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { accessStore } from "@/lib/access-store";
 import { getCurrentUser } from "@/lib/auth";
 import { store } from "@/lib/store";
 import { Sidebar, type SidebarItem } from "@/components/shell/sidebar";
@@ -13,20 +14,23 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const unreadThreads = store
     .listThreads()
     .reduce((sum, t) => sum + (t.unreadFor[user.id] ?? 0), 0);
+  // Non-critical badge — never let a Supabase hiccup break the admin shell.
+  const openRequests = await accessStore.countOpenRequests().catch(() => 0);
 
   const items: SidebarItem[] = [
     { href: "/admin", label: "Dashboard", icon: "home" },
+    { href: "/admin/leads", label: "Inquiries", icon: "inbox", badge: newLeads },
     { href: "/admin/jobs", label: "Jobs", icon: "clipboard-list", badge: stats.activeJobs },
     { href: "/admin/schedule", label: "Schedule", icon: "calendar-days" },
     { href: "/admin/pickups", label: "Pickups", icon: "sparkles", badge: stats.upcomingPickups },
     { href: "/admin/lot", label: "Storage Lot", icon: "map-pinned" },
     { href: "/admin/customers", label: "Customers", icon: "users" },
     { href: "/admin/rvs", label: "RVs", icon: "truck" },
+    { href: "/admin/access", label: "Customer Access", icon: "ticket", badge: openRequests },
     { href: "/admin/rentals", label: "Rentals", icon: "key-round" },
     { href: "/admin/quotes", label: "Quotes", icon: "file-text" },
     { href: "/admin/invoices", label: "Invoices", icon: "credit-card" },
     { href: "/admin/messages", label: "Messages", icon: "message-square", badge: unreadThreads },
-    { href: "/admin/leads", label: "Leads", icon: "user-cog", badge: newLeads },
     { href: "/admin/analytics", label: "Analytics", icon: "line-chart" },
     { href: "/admin/accounting", label: "Accounting", icon: "wallet" },
     { href: "/admin/staff", label: "Staff", icon: "users" },

@@ -10,12 +10,14 @@ import {
   CreditCard,
   FileText,
   Home,
+  Inbox,
   KeyRound,
   LineChart,
   MapPinned,
   Menu,
   MessageSquare,
   Sparkles,
+  Ticket,
   Truck,
   UserCog,
   Users,
@@ -29,6 +31,7 @@ import { cn } from "@/lib/utils";
 
 const ICONS: Record<string, LucideIcon> = {
   home: Home,
+  inbox: Inbox,
   truck: Truck,
   "calendar-check": CalendarCheck2,
   "calendar-days": CalendarDays,
@@ -43,6 +46,7 @@ const ICONS: Record<string, LucideIcon> = {
   "line-chart": LineChart,
   wallet: Wallet,
   "key-round": KeyRound,
+  ticket: Ticket,
 };
 
 export type SidebarItem = {
@@ -61,11 +65,6 @@ export function Sidebar({
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-
-  // Close drawer when route changes (link tap navigates → menu auto-dismisses)
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
 
   // Close on Escape, lock body scroll while open
   useEffect(() => {
@@ -95,6 +94,7 @@ export function Sidebar({
           <li key={item.href}>
             <Link
               href={item.href}
+              onClick={() => setOpen(false)}
               className={cn(
                 "flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                 active

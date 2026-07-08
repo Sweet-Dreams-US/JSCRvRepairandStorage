@@ -54,22 +54,26 @@ export function RoleSwitcher({
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-72">
-        <DropdownMenuLabel>Switch demo account</DropdownMenuLabel>
-        {accounts.map((a) => (
-          <DropdownMenuItem
-            key={a.id}
-            onClick={() => switchTo(a.id)}
-            disabled={pending}
-            className="flex flex-col items-start gap-0"
-          >
-            <div className="flex w-full items-center justify-between">
-              <span className="text-sm font-semibold">{a.label}</span>
-              <span className="text-[10px] uppercase text-muted-foreground">{a.role}</span>
-            </div>
-            <span className="text-[11px] text-muted-foreground">{a.subtitle}</span>
-          </DropdownMenuItem>
-        ))}
-        <DropdownMenuSeparator />
+        {accounts.length > 0 && (
+          <>
+            <DropdownMenuLabel>Switch demo account</DropdownMenuLabel>
+            {accounts.map((a) => (
+              <DropdownMenuItem
+                key={a.id}
+                onClick={() => switchTo(a.id)}
+                disabled={pending}
+                className="flex flex-col items-start gap-0"
+              >
+                <div className="flex w-full items-center justify-between">
+                  <span className="text-sm font-semibold">{a.label}</span>
+                  <span className="text-[10px] uppercase text-muted-foreground">{a.role}</span>
+                </div>
+                <span className="text-[11px] text-muted-foreground">{a.subtitle}</span>
+              </DropdownMenuItem>
+            ))}
+            <DropdownMenuSeparator />
+          </>
+        )}
         <DropdownMenuItem onClick={() => router.refresh()}>
           <RefreshCcw className="mr-2 h-3.5 w-3.5" /> Refresh
         </DropdownMenuItem>

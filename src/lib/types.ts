@@ -242,13 +242,58 @@ export interface Lead {
   email: string;
   phone: string;
   rvType?: RvType;
-  interest: "repair" | "storage" | "maintenance" | "rental" | "quote" | "other";
+  interest: "repair" | "storage" | "maintenance" | "plan" | "rental" | "quote" | "other";
   message: string;
   source: "website" | "facebook" | "referral" | "google" | "other";
   status: "new" | "contacted" | "scheduled" | "converted" | "lost";
   createdAt: string;
   assignedTo?: string;
   rentalId?: string; // populated when a lead originates from a specific rental listing
+}
+
+// ────────────── CUSTOMER ACCESS (code-based) ──────────────
+export type AccessItemType = "rv" | "plan" | "boat" | "storage" | "other";
+export type AccessStatus = "active" | "completed" | "archived";
+
+export interface CustomerAccess {
+  id: string;
+  code: string; // human-typable, e.g. "JSC-7Q2K"
+  customerName: string;
+  email: string;
+  itemLabel: string; // what they bought / their rig, e.g. "2021 Jayco Jay Flight 28BHS"
+  itemType: AccessItemType;
+  currentStatus: string; // short headline, e.g. "In winter storage"
+  status: AccessStatus;
+  createdBy?: string;
+  revoked: boolean;
+  createdAt: string;
+}
+
+export interface AccessUpdate {
+  id: string;
+  accessId: string;
+  title: string;
+  body?: string;
+  createdBy?: string;
+  createdAt: string;
+}
+
+export type CustomerRequestType = "pickup" | "service" | "other";
+export type CustomerRequestStatus =
+  | "new"
+  | "acknowledged"
+  | "scheduled"
+  | "done"
+  | "declined";
+
+export interface CustomerRequest {
+  id: string;
+  accessId: string;
+  type: CustomerRequestType;
+  requestedDate?: string; // ISO date, for pickup requests
+  details?: string;
+  status: CustomerRequestStatus;
+  createdAt: string;
 }
 
 // ────────────── RENTALS ──────────────

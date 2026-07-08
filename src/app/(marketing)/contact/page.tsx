@@ -9,7 +9,53 @@ import { BUSINESS, formatAddressLine } from "@/lib/business";
 
 export const metadata = { title: "Contact Joe" };
 
-export default function ContactPage() {
+/** Map a ?topic= (and optional tier/rental) into a preselected interest + prefilled note. */
+function presetFromTopic(sp: { topic?: string; tier?: string; rental?: string }): {
+  defaultInterest: string;
+  presetNote?: string;
+} {
+  switch (sp.topic) {
+    case "plan":
+      return {
+        defaultInterest: "plan",
+        presetNote: "I'm interested in the Camper's Care Plan (storage + service). ",
+      };
+    case "storage":
+      return {
+        defaultInterest: "storage",
+        presetNote: sp.tier
+          ? `I'd like to reserve a storage spot — ${sp.tier}. `
+          : "I'd like to reserve a storage spot. ",
+      };
+    case "boat-storage":
+      return {
+        defaultInterest: "storage",
+        presetNote: "I'd like to store my boat with you. ",
+      };
+    case "rental":
+      return {
+        defaultInterest: "rental",
+        presetNote: sp.rental
+          ? `I'm interested in renting the ${sp.rental}. `
+          : "I'm interested in an RV rental. ",
+      };
+    case "maintenance":
+      return { defaultInterest: "maintenance" };
+    case "repair":
+      return { defaultInterest: "repair" };
+    default:
+      return { defaultInterest: "repair" };
+  }
+}
+
+export default async function ContactPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ topic?: string; tier?: string; rental?: string }>;
+}) {
+  const sp = await searchParams;
+  const { defaultInterest, presetNote } = presetFromTopic(sp);
+
   return (
     <>
       {/* ──────────── HERO ──────────── */}
@@ -123,7 +169,7 @@ export default function ContactPage() {
                     </StampBadge>
                   </div>
                   <div className="mt-6">
-                    <LeadForm />
+                    <LeadForm defaultInterest={defaultInterest} presetNote={presetNote} />
                   </div>
                 </div>
                 <div className="absolute -bottom-4 left-4 -rotate-3">

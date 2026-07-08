@@ -19,7 +19,15 @@ import { submitLeadAction, type LeadFormState } from "@/app/actions/leads";
 
 const initial: LeadFormState = { ok: false };
 
-export function LeadForm({ compact = false }: { compact?: boolean }) {
+export function LeadForm({
+  compact = false,
+  defaultInterest = "repair",
+  presetNote,
+}: {
+  compact?: boolean;
+  defaultInterest?: string;
+  presetNote?: string;
+}) {
   const [state, formAction, pending] = useActionState(submitLeadAction, initial);
 
   useEffect(() => {
@@ -52,12 +60,13 @@ export function LeadForm({ compact = false }: { compact?: boolean }) {
       </Field>
       <div className={compact ? "grid gap-4" : "grid gap-4 sm:grid-cols-2"}>
         <Field label="What can we help with?" name="interest" required>
-          <Select name="interest" defaultValue="repair">
+          <Select name="interest" defaultValue={defaultInterest}>
             <SelectTrigger><SelectValue /></SelectTrigger>
             <SelectContent>
               <SelectItem value="repair">RV Repair</SelectItem>
               <SelectItem value="maintenance">Maintenance / Service</SelectItem>
               <SelectItem value="storage">Storage</SelectItem>
+              <SelectItem value="plan">Storage &amp; Service Plan</SelectItem>
               <SelectItem value="rental">RV Rental</SelectItem>
               <SelectItem value="quote">Need a Quote</SelectItem>
               <SelectItem value="other">Something Else</SelectItem>
@@ -83,6 +92,7 @@ export function LeadForm({ compact = false }: { compact?: boolean }) {
       <Field label="Tell us a little about it" name="message" required defaultError={state.errors?.message}>
         <Textarea
           name="message"
+          defaultValue={presetNote}
           placeholder="Slide-out won't extend, looking for a winter storage spot, etc."
           required
           rows={4}

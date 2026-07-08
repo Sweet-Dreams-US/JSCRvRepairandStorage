@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Bell, Home } from "lucide-react";
-import { DEMO_ACCOUNTS, getCurrentUser } from "@/lib/auth";
+import { DEMO_ACCOUNTS, getCurrentUser, isDemoMode } from "@/lib/auth";
 import { RoleSwitcher } from "@/components/shell/role-switcher";
 import { Button } from "@/components/ui/button";
 
@@ -35,7 +35,7 @@ export async function Topbar({
         </Button>
         <RoleSwitcher
           current={{ name: user.name, role: user.role }}
-          accounts={DEMO_ACCOUNTS}
+          accounts={isDemoMode() ? DEMO_ACCOUNTS : []}
         />
       </div>
     </header>

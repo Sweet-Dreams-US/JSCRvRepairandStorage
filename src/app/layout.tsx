@@ -25,15 +25,20 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://jscrvrepair.com",
+  ),
   title: {
     default: `${BUSINESS.name} — ${BUSINESS.tagline}`,
     template: `%s | ${BUSINESS.name}`,
   },
   description: BUSINESS.about,
+  alternates: { canonical: "/" },
   openGraph: {
     title: BUSINESS.name,
     description: BUSINESS.about,
     siteName: BUSINESS.name,
+    url: "/",
     locale: "en_US",
     type: "website",
   },

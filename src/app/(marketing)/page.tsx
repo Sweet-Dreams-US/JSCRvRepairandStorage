@@ -23,6 +23,7 @@ import { Reveal, RevealGroup, RevealItem } from "@/components/marketing/atoms/re
 import { StampBadge } from "@/components/marketing/atoms/stamp-badge";
 import { StampButton } from "@/components/marketing/atoms/stamp-button";
 import { WordReveal } from "@/components/marketing/atoms/word-reveal";
+import { CamperCarePlan } from "@/components/marketing/camper-care-plan";
 import { LeadForm } from "@/components/marketing/lead-form";
 import { BUSINESS, formatAddressLine } from "@/lib/business";
 
@@ -32,6 +33,7 @@ export default function HomePage() {
       <Hero />
       <Ticker />
       <Services />
+      <CamperCarePlan />
       <StorageSpotlight />
       <HowItWorks />
       <Testimonials />

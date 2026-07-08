@@ -27,6 +27,7 @@ import { Reveal, RevealGroup, RevealItem } from "@/components/marketing/atoms/re
 import { StampBadge } from "@/components/marketing/atoms/stamp-badge";
 import { StampButton } from "@/components/marketing/atoms/stamp-button";
 import { WordReveal } from "@/components/marketing/atoms/word-reveal";
+import { CamperCarePlan } from "@/components/marketing/camper-care-plan";
 import { LeadForm } from "@/components/marketing/lead-form";
 import { BUSINESS } from "@/lib/business";
 
@@ -109,7 +110,7 @@ export default function StoragePage() {
         <div className="container-bleed grid gap-10 pt-14 pb-20 lg:grid-cols-12 lg:gap-16 lg:pt-20 lg:pb-28">
           <div className="lg:col-span-6">
             <Reveal>
-              <Eyebrow number="Zone A · B · C · Boat">RV & Boat Storage · Reserve Now</Eyebrow>
+              <Eyebrow number="From $65 / mo">RV &amp; Boat Storage · Not just a parking spot</Eyebrow>
             </Reveal>
             <h1 className="mt-7 font-display text-[clamp(3rem,7.5vw,7rem)] font-bold leading-[0.94] tracking-tight">
               <WordReveal text="Store your" />
@@ -154,7 +155,7 @@ export default function StoragePage() {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="/images/aerial-lot.png"
-                    alt="Aerial view of the JSC RV Repair storage lot"
+                    alt="Aerial view of the JSC RV Service storage lot"
                     className="h-full w-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-ink/55 via-transparent to-transparent" />
@@ -177,6 +178,9 @@ export default function StoragePage() {
           </div>
         </div>
       </section>
+
+      {/* ──────────── CAMPER'S CARE PLAN — the flagship storage + service offer ──────────── */}
+      <CamperCarePlan />
 
       {/* ──────────── BOAT STORAGE — dedicated lake-water section ──────────── */}
       <section className="relative overflow-hidden bg-patina text-cream bg-grain bg-grain-strong">

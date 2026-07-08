@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { sendInquiryEmail } from "@/lib/email";
 import { store } from "@/lib/store";
 import type { Lead, RvType } from "@/lib/types";
 
@@ -10,7 +11,7 @@ const leadSchema = z.object({
   email: z.string().email("Please enter a valid email"),
   phone: z.string().min(7, "Please enter a phone number"),
   rvType: z.string().optional(),
-  interest: z.enum(["repair", "storage", "maintenance", "rental", "quote", "other"]),
+  interest: z.enum(["repair", "storage", "maintenance", "plan", "rental", "quote", "other"]),
   message: z.string().min(5, "Tell us a bit about how we can help"),
   source: z.string().default("website"),
 });
@@ -35,7 +36,7 @@ export async function submitLeadAction(
     }
     return { ok: false, message: "Please fix the highlighted fields.", errors };
   }
-  store.createLead({
+  const lead = store.createLead({
     name: parsed.data.name,
     email: parsed.data.email,
     phone: parsed.data.phone,
@@ -44,6 +45,11 @@ export async function submitLeadAction(
     message: parsed.data.message,
     source: (parsed.data.source as Lead["source"]) ?? "website",
   });
+
+  // Notify the shop by email. Awaited so it completes before the
+  // serverless function suspends; never throws (see sendInquiryEmail).
+  await sendInquiryEmail(lead);
+
   revalidatePath("/admin");
   revalidatePath("/admin/leads");
   return {

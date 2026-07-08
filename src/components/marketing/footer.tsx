@@ -55,7 +55,8 @@ export function MarketingFooter() {
             <FooterLink href="/rentals">Rentals</FooterLink>
             <FooterLink href="/about">About Joe</FooterLink>
             <FooterLink href="/contact">Contact</FooterLink>
-            <FooterLink href="/login">Customer Portal</FooterLink>
+            <FooterLink href="/track">Track Your RV</FooterLink>
+            <FooterLink href="/login">Login</FooterLink>
           </ul>
         </div>
 
