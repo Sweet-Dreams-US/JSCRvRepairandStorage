@@ -65,8 +65,8 @@ export function MarketingHeader() {
               {BUSINESS.phone}
             </span>
           </a>
-          <StampButton href="/login" variant="garage" size="md">
-            Login
+          <StampButton href="/track" variant="garage" size="md">
+            User Login
           </StampButton>
         </div>
 
@@ -99,8 +99,8 @@ export function MarketingHeader() {
             <Phone className="h-4 w-4 text-garage" />
             {BUSINESS.phone}
           </a>
-          <StampButton href="/login" variant="garage" size="md" className="mt-2 w-full">
-            Log In
+          <StampButton href="/track" variant="garage" size="md" className="mt-2 w-full">
+            User Login
           </StampButton>
         </nav>
       </div>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { ArrowRight, Lock, ShieldCheck, UserCog, Wrench } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -39,6 +40,11 @@ export default async function LoginPage({
 }) {
   const { error } = await searchParams;
   const demo = isDemoMode();
+
+  // On the live site, /login is the customer login. The demo account picker
+  // only exists when demo mode is on (for showing the platform to a prospect).
+  // The admin/owner sign-in is not here — it lives at /admin.
+  if (!demo) redirect("/track");
 
   return (
     <div className="grid min-h-screen md:grid-cols-2">

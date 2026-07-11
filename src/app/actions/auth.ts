@@ -25,7 +25,8 @@ export async function loginWithPasswordAction(formData: FormData): Promise<void>
   const password = String(formData.get("password") ?? "");
   if (!verifyAdminPassword(password)) {
     // Wrong password, or no ADMIN_PASSWORD configured on this deployment.
-    redirect("/login?error=invalid");
+    // The admin login lives at /admin (unlinked); keep the error there.
+    redirect("/admin?error=invalid");
   }
   await setSession(OWNER_USER_ID);
   redirect("/admin");

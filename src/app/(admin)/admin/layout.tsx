@@ -1,12 +1,23 @@
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { accessStore } from "@/lib/access-store";
 import { getCurrentUser } from "@/lib/auth";
 import { store } from "@/lib/store";
+import { AdminLogin } from "@/components/shell/admin-login";
 import { Sidebar, type SidebarItem } from "@/components/shell/sidebar";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser();
-  if (!user) redirect("/login");
+  // Not signed in → show the admin sign-in in place (this is the only way to
+  // reach it; it isn't linked from the public site). `children` isn't rendered,
+  // so the gated pages never run.
+  if (!user) {
+    return (
+      <Suspense>
+        <AdminLogin />
+      </Suspense>
+    );
+  }
   if (user.role === "customer") redirect("/portal");
 
   const stats = store.computeStats();
