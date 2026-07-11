@@ -260,10 +260,17 @@ export interface CustomerAccess {
   code: string; // human-typable, e.g. "JSC-7Q2K"
   customerName: string;
   email: string;
+  phone?: string;
   itemLabel: string; // what they bought / their rig, e.g. "2021 Jayco Jay Flight 28BHS"
   itemType: AccessItemType;
   currentStatus: string; // short headline, e.g. "In winter storage"
   status: AccessStatus;
+  planType?: string; // e.g. "Camper's Care Plan", "Winter Storage"
+  monthlyRate?: number; // $/mo, if on a recurring plan
+  storageLocation?: string; // e.g. "Zone A · Spot 12"
+  nextServiceDate?: string; // ISO date
+  tags: string[]; // e.g. ["snowbird", "vip"]
+  internalNotes?: string; // admin-only, never shown to the customer
   createdBy?: string;
   revoked: boolean;
   createdAt: string;
@@ -293,6 +300,38 @@ export interface CustomerRequest {
   requestedDate?: string; // ISO date, for pickup requests
   details?: string;
   status: CustomerRequestStatus;
+  createdAt: string;
+}
+
+// Two-way message between the shop and a customer.
+export type MessageSender = "owner" | "customer";
+export interface CustomerMessage {
+  id: string;
+  accessId: string;
+  sender: MessageSender;
+  body: string;
+  readByOwner: boolean;
+  readByCustomer: boolean;
+  createdAt: string;
+}
+
+// Scheduled appointment tied to a customer.
+export type AppointmentKind = "pickup" | "service" | "dropoff" | "other";
+export type AppointmentStatus =
+  | "scheduled"
+  | "confirmed"
+  | "completed"
+  | "cancelled";
+export interface Appointment {
+  id: string;
+  accessId: string;
+  requestId?: string; // set when scheduled from a customer request
+  kind: AppointmentKind;
+  title?: string;
+  scheduledFor: string; // ISO datetime
+  status: AppointmentStatus;
+  notes?: string;
+  createdBy?: string;
   createdAt: string;
 }
 

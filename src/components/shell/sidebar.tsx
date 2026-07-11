@@ -5,12 +5,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   CalendarCheck2,
+  CalendarClock,
   CalendarDays,
   ClipboardList,
   CreditCard,
   FileText,
   Home,
   Inbox,
+  ListTodo,
   KeyRound,
   LineChart,
   MapPinned,
@@ -32,6 +34,8 @@ import { cn } from "@/lib/utils";
 const ICONS: Record<string, LucideIcon> = {
   home: Home,
   inbox: Inbox,
+  "list-todo": ListTodo,
+  "calendar-clock": CalendarClock,
   truck: Truck,
   "calendar-check": CalendarCheck2,
   "calendar-days": CalendarDays,

@@ -2,15 +2,16 @@ import Link from "next/link";
 import {
   Activity,
   ArrowRight,
-  CalendarCheck2,
-  ClipboardList,
-  CreditCard,
+  CalendarClock,
   DollarSign,
-  FileText,
+  Inbox,
   MapPinned,
+  MessageSquare,
+  Plus,
   Sparkles,
   TrendingUp,
   UserPlus,
+  Users,
   Wrench,
 } from "lucide-react";
 import { Topbar } from "@/components/shell/topbar";
@@ -20,9 +21,16 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { RevenueChart } from "@/components/admin/revenue-chart";
+import { accessStore } from "@/lib/access-store";
 import { requireUser } from "@/lib/auth";
 import { store } from "@/lib/store";
-import { formatCurrency, formatDate, formatDateTime, relativeTime } from "@/lib/utils";
+import {
+  formatApptWhen,
+  formatCurrency,
+  formatDate,
+  formatDateTime,
+  relativeTime,
+} from "@/lib/utils";
 
 export default async function AdminDashboard() {
   const user = await requireUser();
@@ -38,6 +46,16 @@ export default async function AdminDashboard() {
   const revenueByMonth = store.revenueByMonth();
   const newLeads = store.newLeads();
 
+  // Live CRM data (Supabase) — the real business. Fail-soft so the page always renders.
+  const [summary, upcomingAppts, openReqs, custActivity, accounts] = await Promise.all([
+    accessStore.dashboardSummary().catch(() => null),
+    accessStore.upcomingAppointments(6).catch(() => []),
+    accessStore.listRequests().then((r) => r.filter((x) => x.status === "new")).catch(() => []),
+    accessStore.recentActivity(8).catch(() => []),
+    accessStore.listAccess().catch(() => []),
+  ]);
+  const nameById = new Map(accounts.map((a) => [a.id, a] as const));
+
   return (
     <>
       <Topbar
@@ -45,6 +63,125 @@ export default async function AdminDashboard() {
         subtitle="Here’s where the shop stands right now."
       />
       <main className="flex-1 space-y-6 bg-secondary/20 p-6">
+        {/* ───────── LIVE COMMAND CENTER (real customers) ───────── */}
+        {summary && (
+          <section className="space-y-4">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+              <LiveStat icon={<Users className="h-4 w-4" />} label="Customers" value={summary.activeCustomers} sub={`${summary.totalCustomers} total`} href="/admin/access" />
+              <LiveStat icon={<Inbox className="h-4 w-4" />} label="Open requests" value={summary.openRequests} sub="Awaiting action" href="/admin/requests" accent={summary.openRequests > 0 ? "primary" : undefined} />
+              <LiveStat icon={<MessageSquare className="h-4 w-4" />} label="Unread messages" value={summary.unreadMessages} sub="From customers" href="/admin/access" accent={summary.unreadMessages > 0 ? "primary" : undefined} />
+              <LiveStat icon={<CalendarClock className="h-4 w-4" />} label="Upcoming" value={summary.upcomingAppointments} sub="Appointments" href="/admin/appointments" />
+              <LiveStat icon={<DollarSign className="h-4 w-4" />} label="Recurring" value={formatCurrency(summary.monthlyRecurring)} sub="Per month" href="/admin/access" accent="success" />
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              <Button asChild size="sm"><Link href="/admin/access/new"><Plus className="h-4 w-4" /> New customer</Link></Button>
+              <Button asChild size="sm" variant="secondary"><Link href="/admin/requests">Triage requests</Link></Button>
+              <Button asChild size="sm" variant="secondary"><Link href="/admin/appointments">Schedule</Link></Button>
+              <Button asChild size="sm" variant="ghost"><Link href="/admin/leads">Inquiries ({newLeads.length})</Link></Button>
+            </div>
+
+            <div className="grid gap-4 lg:grid-cols-2">
+              {/* Needs attention: open requests */}
+              <Card>
+                <CardContent className="p-5">
+                  <div className="flex items-center justify-between">
+                    <h2 className="font-display text-lg font-semibold">Needs attention</h2>
+                    <Button asChild size="sm" variant="ghost"><Link href="/admin/requests">All <ArrowRight className="h-3.5 w-3.5" /></Link></Button>
+                  </div>
+                  <Separator className="my-3" />
+                  {openReqs.length === 0 ? (
+                    <p className="py-6 text-center text-sm text-muted-foreground">No open requests. Nicely done.</p>
+                  ) : (
+                    <ul className="space-y-2">
+                      {openReqs.slice(0, 5).map((r) => {
+                        const a = nameById.get(r.accessId);
+                        return (
+                          <li key={r.id}>
+                            <Link href={a ? `/admin/access/${a.id}` : "/admin/requests"} className="block rounded-md border bg-background p-3 hover:border-primary/40">
+                              <div className="flex items-center justify-between">
+                                <span className="text-sm font-semibold capitalize">{r.type} request</span>
+                                <Badge variant="warning">new</Badge>
+                              </div>
+                              <div className="text-xs text-muted-foreground">
+                                {a ? `${a.customerName} · ${a.itemLabel}` : "Customer"}
+                                {r.requestedDate ? ` · ${r.requestedDate}` : ""}
+                              </div>
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Upcoming appointments */}
+              <Card>
+                <CardContent className="p-5">
+                  <div className="flex items-center justify-between">
+                    <h2 className="font-display text-lg font-semibold">Upcoming appointments</h2>
+                    <Button asChild size="sm" variant="ghost"><Link href="/admin/appointments">All <ArrowRight className="h-3.5 w-3.5" /></Link></Button>
+                  </div>
+                  <Separator className="my-3" />
+                  {upcomingAppts.length === 0 ? (
+                    <p className="py-6 text-center text-sm text-muted-foreground">Nothing scheduled yet.</p>
+                  ) : (
+                    <ul className="space-y-2">
+                      {upcomingAppts.map((ap) => {
+                        const a = nameById.get(ap.accessId);
+                        return (
+                          <li key={ap.id} className="flex items-center gap-3 rounded-md border bg-background p-3">
+                            <div className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-primary/10 text-primary">
+                              <CalendarClock className="h-4 w-4" />
+                            </div>
+                            <div className="min-w-0">
+                              <div className="truncate text-sm font-semibold">
+                                {ap.title || ap.kind} · {formatApptWhen(ap.scheduledFor)}
+                              </div>
+                              <div className="truncate text-xs text-muted-foreground">
+                                {a ? `${a.customerName} · ${a.itemLabel}` : "Customer"}
+                              </div>
+                            </div>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+
+            {custActivity.length > 0 && (
+              <Card>
+                <CardContent className="p-5">
+                  <h2 className="mb-3 font-display text-lg font-semibold">Recent customer activity</h2>
+                  <ul className="grid gap-2 sm:grid-cols-2">
+                    {custActivity.map((it, i) => (
+                      <li key={i} className="flex items-center gap-2 text-sm">
+                        <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                        <span className="truncate">
+                          <span className="font-medium">{it.customerName}</span>
+                          <span className="text-muted-foreground"> — {it.summary}</span>
+                        </span>
+                        <span className="ml-auto shrink-0 text-[11px] text-muted-foreground">{relativeTime(it.at)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            )}
+          </section>
+        )}
+
+        <div className="flex items-center gap-3 pt-2">
+          <Separator className="flex-1" />
+          <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+            Demo operations data
+          </span>
+          <Separator className="flex-1" />
+        </div>
+
         {/* Top stats */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <StatBlock
@@ -305,6 +442,43 @@ function StatBlock({
           </div>
           <div className="mt-2 text-3xl font-bold tabular-nums">{value}</div>
           <div className="mt-1 truncate text-xs text-muted-foreground">{sub}</div>
+        </CardContent>
+      </Card>
+    </Link>
+  );
+}
+
+function LiveStat({
+  icon,
+  label,
+  value,
+  sub,
+  href,
+  accent,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: React.ReactNode;
+  sub: string;
+  href: string;
+  accent?: "primary" | "success";
+}) {
+  const ring =
+    accent === "primary"
+      ? "border-primary/40 bg-primary/5"
+      : accent === "success"
+        ? "border-success/40 bg-success/5"
+        : "border-border bg-background";
+  return (
+    <Link href={href}>
+      <Card className={`border-2 transition-shadow hover:shadow-md ${ring}`}>
+        <CardContent className="p-4">
+          <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+            {icon}
+            {label}
+          </div>
+          <div className="mt-1.5 text-2xl font-bold tabular-nums">{value}</div>
+          <div className="mt-0.5 truncate text-[11px] text-muted-foreground">{sub}</div>
         </CardContent>
       </Card>
     </Link>

@@ -27,6 +27,33 @@ export function formatDateTime(date: Date | string) {
   return formatDate(date, { hour: "numeric", minute: "2-digit" });
 }
 
+/**
+ * Format an appointment datetime. Appointment times are stored as "floating"
+ * wall-clock (the entered value tagged UTC), so we format in UTC to show exactly
+ * what was scheduled — no timezone drift for a single-location shop.
+ */
+export function formatApptWhen(iso: string) {
+  try {
+    return new Intl.DateTimeFormat("en-US", {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      timeZone: "UTC",
+    }).format(new Date(iso));
+  } catch {
+    return iso;
+  }
+}
+
+/** Convert a datetime-local input value ("2026-08-18T09:00") to a floating-UTC ISO. */
+export function apptInputToIso(local: string): string {
+  // Tag the entered wall-clock as UTC so it displays back unchanged everywhere.
+  const withSeconds = local.length === 16 ? `${local}:00` : local;
+  return `${withSeconds}Z`;
+}
+
 export function formatPhone(phone: string) {
   const digits = phone.replace(/\D/g, "");
   if (digits.length === 10) {

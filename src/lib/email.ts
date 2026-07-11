@@ -6,7 +6,40 @@
 // break. This lets the site run today, before the domain + Resend are wired.
 
 import { BUSINESS } from "./business";
-import type { CustomerAccess, AccessUpdate, CustomerRequest, Lead } from "./types";
+import type {
+  Appointment,
+  CustomerAccess,
+  AccessUpdate,
+  CustomerRequest,
+  Lead,
+} from "./types";
+
+const APPOINTMENT_LABEL: Record<Appointment["kind"], string> = {
+  pickup: "Pickup",
+  service: "Service",
+  dropoff: "Drop-off",
+  other: "Appointment",
+};
+
+/**
+ * Format an appointment datetime for emails. Appointment times are stored as
+ * "floating" wall-clock (entered value tagged UTC), so we always format in UTC
+ * to show exactly what was scheduled — no timezone drift for a one-location shop.
+ */
+function fmtDateTime(iso: string): string {
+  try {
+    return new Intl.DateTimeFormat("en-US", {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      timeZone: "UTC",
+    }).format(new Date(iso));
+  } catch {
+    return iso;
+  }
+}
 
 const REQUEST_LABEL: Record<CustomerRequest["type"], string> = {
   pickup: "Pickup request",
@@ -278,5 +311,112 @@ export async function sendCustomerRequestEmail(
     html,
     text,
     logContext: `Would notify ${to} — ${label} from ${access.customerName} on ${access.itemLabel}.`,
+  });
+}
+
+// ─────────────── messaging: owner → customer ───────────────
+
+export async function sendCustomerMessageEmail(
+  access: CustomerAccess,
+  body: string,
+): Promise<EmailResult> {
+  const url = `${siteUrl()}/track`;
+  const html = shell(`
+    <tr><td style="padding:24px 28px 8px;">
+      <div style="font:600 11px/1 -apple-system,Segoe UI,sans-serif;text-transform:uppercase;letter-spacing:.18em;color:#8c1d10;">New message · JSC RV Service</div>
+      <div style="margin-top:8px;font:700 22px/1.2 Georgia,serif;color:#1a1614;">You have a message about your ${esc(access.itemLabel)}</div>
+    </td></tr>
+    <tr><td style="padding:8px 28px 4px;">
+      <div style="padding:14px 16px;background:#fff;border-left:3px solid #c8331f;font:15px/1.6 -apple-system,Segoe UI,sans-serif;color:#1a1614;white-space:pre-wrap;">${esc(body)}</div>
+    </td></tr>
+    <tr><td style="padding:14px 28px 24px;font:15px/1.6 -apple-system,Segoe UI,sans-serif;color:#1a1614;">
+      Reply from your account: <a href="${url}" style="color:#c8331f;">${esc(url)}</a>
+    </td></tr>`);
+  const text = [
+    `New message from JSC RV Service about your ${access.itemLabel}:`,
+    ``,
+    body,
+    ``,
+    `Reply from your account: ${url}`,
+  ].join("\n");
+  return deliver({
+    to: access.email,
+    replyTo: process.env.INQUIRY_TO_EMAIL || BUSINESS.email,
+    subject: `New message about your ${access.itemLabel}`,
+    html,
+    text,
+    logContext: `Would message ${access.email} about ${access.itemLabel}.`,
+  });
+}
+
+// ─────────────── messaging: customer → owner (to the shop) ───────────────
+
+export async function sendOwnerMessageEmail(
+  access: CustomerAccess,
+  body: string,
+): Promise<EmailResult> {
+  const to = process.env.INQUIRY_TO_EMAIL || BUSINESS.email;
+  const html = shell(`
+    <tr><td style="padding:24px 28px 8px;">
+      <div style="font:600 11px/1 -apple-system,Segoe UI,sans-serif;text-transform:uppercase;letter-spacing:.18em;color:#8c1d10;">Customer message · customer panel</div>
+      <div style="margin-top:8px;font:700 22px/1.2 Georgia,serif;color:#1a1614;">${esc(access.customerName)} — ${esc(access.itemLabel)}</div>
+    </td></tr>
+    <tr><td style="padding:8px 28px 4px;">
+      <div style="padding:14px 16px;background:#fff;border-left:3px solid #c8331f;font:15px/1.6 -apple-system,Segoe UI,sans-serif;color:#1a1614;white-space:pre-wrap;">${esc(body)}</div>
+      <div style="margin-top:10px;color:#6d6a64;font-size:13px;">Reply to reach ${esc(access.customerName)} at ${esc(access.email)}, or answer in the admin panel.</div>
+    </td></tr>`);
+  const text = [
+    `Message from ${access.customerName} <${access.email}> about ${access.itemLabel}:`,
+    ``,
+    body,
+  ].join("\n");
+  return deliver({
+    to,
+    replyTo: access.email,
+    subject: `Message · ${access.customerName} · ${access.itemLabel}`,
+    html,
+    text,
+    logContext: `Would notify ${to} — message from ${access.customerName}.`,
+  });
+}
+
+// ─────────────── appointment: owner → customer ───────────────
+
+export async function sendAppointmentEmail(
+  access: CustomerAccess,
+  appt: Appointment,
+): Promise<EmailResult> {
+  const url = `${siteUrl()}/track`;
+  const label = APPOINTMENT_LABEL[appt.kind];
+  const when = fmtDateTime(appt.scheduledFor);
+  const html = shell(`
+    <tr><td style="padding:24px 28px 8px;">
+      <div style="font:600 11px/1 -apple-system,Segoe UI,sans-serif;text-transform:uppercase;letter-spacing:.18em;color:#8c1d10;">${esc(label)} scheduled · JSC RV Service</div>
+      <div style="margin-top:8px;font:700 22px/1.2 Georgia,serif;color:#1a1614;">${esc(appt.title || `${label} — ${access.itemLabel}`)}</div>
+    </td></tr>
+    <tr><td style="padding:12px 28px 6px;">
+      <div style="padding:14px 16px;background:#1a1614;color:#f4ede1;font:600 18px/1.3 -apple-system,Segoe UI,sans-serif;text-align:center;">${esc(when)}</div>
+    </td></tr>
+    ${appt.notes ? `<tr><td style="padding:6px 28px 4px;"><div style="padding:12px 16px;background:#fff;border-left:3px solid #c8331f;font:15px/1.6 -apple-system,Segoe UI,sans-serif;color:#1a1614;white-space:pre-wrap;">${esc(appt.notes)}</div></td></tr>` : ""}
+    <tr><td style="padding:14px 28px 24px;font:15px/1.6 -apple-system,Segoe UI,sans-serif;color:#1a1614;">
+      Details on your account: <a href="${url}" style="color:#c8331f;">${esc(url)}</a> · Questions? Call ${esc(BUSINESS.phone)}.
+    </td></tr>`);
+  const text = [
+    `${label} scheduled for your ${access.itemLabel}:`,
+    ``,
+    when,
+    appt.notes ? `\n${appt.notes}` : "",
+    ``,
+    `Details: ${url}  ·  Questions? ${BUSINESS.phone}`,
+  ]
+    .filter(Boolean)
+    .join("\n");
+  return deliver({
+    to: access.email,
+    replyTo: process.env.INQUIRY_TO_EMAIL || BUSINESS.email,
+    subject: `${label} scheduled — ${when}`,
+    html,
+    text,
+    logContext: `Would notify ${access.email} — ${label} scheduled for ${when}.`,
   });
 }
