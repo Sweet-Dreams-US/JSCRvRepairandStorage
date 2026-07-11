@@ -236,6 +236,7 @@ export interface Thread {
   unreadFor: Record<string, number>;
 }
 
+export type LeadStatus = "new" | "contacted" | "scheduled" | "converted" | "lost";
 export interface Lead {
   id: string;
   name: string;
@@ -245,10 +246,11 @@ export interface Lead {
   interest: "repair" | "storage" | "maintenance" | "plan" | "rental" | "quote" | "other";
   message: string;
   source: "website" | "facebook" | "referral" | "google" | "other";
-  status: "new" | "contacted" | "scheduled" | "converted" | "lost";
+  status: LeadStatus;
+  internalNotes?: string;
+  lastContactedAt?: string;
+  convertedAccessId?: string; // set when the inquiry is converted into a customer
   createdAt: string;
-  assignedTo?: string;
-  rentalId?: string; // populated when a lead originates from a specific rental listing
 }
 
 // ────────────── CUSTOMER ACCESS (code-based) ──────────────
@@ -331,6 +333,53 @@ export interface Appointment {
   scheduledFor: string; // ISO datetime
   status: AppointmentStatus;
   notes?: string;
+  createdBy?: string;
+  createdAt: string;
+}
+
+// ────────────── BILLING (real: quotes / invoices / expenses) ──────────────
+export type CustomerQuoteStatus = "draft" | "sent" | "approved" | "declined";
+export interface CustomerQuote {
+  id: string;
+  accessId?: string;
+  customerName: string;
+  email: string;
+  title: string;
+  details?: string;
+  amount: number;
+  status: CustomerQuoteStatus;
+  validUntil?: string;
+  createdBy?: string;
+  sentAt?: string;
+  createdAt: string;
+}
+
+export type CustomerInvoiceStatus = "draft" | "sent" | "paid" | "overdue" | "void";
+export interface CustomerInvoice {
+  id: string;
+  accessId?: string;
+  quoteId?: string;
+  customerName: string;
+  email: string;
+  title: string;
+  details?: string;
+  amount: number;
+  amountPaid: number;
+  status: CustomerInvoiceStatus;
+  dueDate?: string;
+  createdBy?: string;
+  sentAt?: string;
+  paidAt?: string;
+  createdAt: string;
+}
+
+export interface ShopExpense {
+  id: string;
+  date: string; // ISO date
+  category: string;
+  vendor?: string;
+  description?: string;
+  amount: number;
   createdBy?: string;
   createdAt: string;
 }

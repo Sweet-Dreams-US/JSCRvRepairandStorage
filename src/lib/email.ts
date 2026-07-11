@@ -10,9 +10,15 @@ import type {
   Appointment,
   CustomerAccess,
   AccessUpdate,
+  CustomerInvoice,
+  CustomerQuote,
   CustomerRequest,
   Lead,
 } from "./types";
+
+function money(n: number): string {
+  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(n);
+}
 
 const APPOINTMENT_LABEL: Record<Appointment["kind"], string> = {
   pickup: "Pickup",
@@ -418,5 +424,76 @@ export async function sendAppointmentEmail(
     html,
     text,
     logContext: `Would notify ${access.email} — ${label} scheduled for ${when}.`,
+  });
+}
+
+// ─────────────── quote → customer ───────────────
+
+export async function sendQuoteEmail(quote: CustomerQuote): Promise<EmailResult> {
+  const shop = process.env.INQUIRY_TO_EMAIL || BUSINESS.email;
+  const html = shell(`
+    <tr><td style="padding:24px 28px 8px;">
+      <div style="font:600 11px/1 -apple-system,Segoe UI,sans-serif;text-transform:uppercase;letter-spacing:.18em;color:#8c1d10;">Quote · JSC RV Service</div>
+      <div style="margin-top:8px;font:700 23px/1.15 Georgia,serif;color:#1a1614;">${esc(quote.title)}</div>
+    </td></tr>
+    ${quote.details ? `<tr><td style="padding:6px 28px 4px;"><div style="padding:14px 16px;background:#fff;border-left:3px solid #c8331f;font:15px/1.6 -apple-system,Segoe UI,sans-serif;color:#1a1614;white-space:pre-wrap;">${esc(quote.details)}</div></td></tr>` : ""}
+    <tr><td style="padding:12px 28px 6px;">
+      <div style="padding:14px 16px;background:#1a1614;color:#f4ede1;font:600 20px/1.2 -apple-system,Segoe UI,sans-serif;text-align:center;">Estimate: ${esc(money(quote.amount))}</div>
+    </td></tr>
+    <tr><td style="padding:12px 28px 24px;font:15px/1.6 -apple-system,Segoe UI,sans-serif;color:#1a1614;">
+      ${quote.validUntil ? `Valid until ${esc(quote.validUntil)}. ` : ""}To approve, just reply to this email or call ${esc(BUSINESS.phone)}.
+    </td></tr>`);
+  const text = [
+    `Quote from JSC RV Service: ${quote.title}`,
+    quote.details ? `\n${quote.details}` : "",
+    ``,
+    `Estimate: ${money(quote.amount)}`,
+    quote.validUntil ? `Valid until ${quote.validUntil}` : "",
+    ``,
+    `To approve, reply to this email or call ${BUSINESS.phone}.`,
+  ].filter(Boolean).join("\n");
+  return deliver({
+    to: quote.email,
+    replyTo: shop,
+    subject: `Your quote from JSC RV Service — ${quote.title}`,
+    html,
+    text,
+    logContext: `Would send quote "${quote.title}" (${money(quote.amount)}) to ${quote.email}.`,
+  });
+}
+
+// ─────────────── invoice → customer ───────────────
+
+export async function sendInvoiceEmail(invoice: CustomerInvoice): Promise<EmailResult> {
+  const shop = process.env.INQUIRY_TO_EMAIL || BUSINESS.email;
+  const due = invoice.amount - invoice.amountPaid;
+  const html = shell(`
+    <tr><td style="padding:24px 28px 8px;">
+      <div style="font:600 11px/1 -apple-system,Segoe UI,sans-serif;text-transform:uppercase;letter-spacing:.18em;color:#8c1d10;">Invoice · JSC RV Service</div>
+      <div style="margin-top:8px;font:700 23px/1.15 Georgia,serif;color:#1a1614;">${esc(invoice.title)}</div>
+    </td></tr>
+    ${invoice.details ? `<tr><td style="padding:6px 28px 4px;"><div style="padding:14px 16px;background:#fff;border-left:3px solid #c8331f;font:15px/1.6 -apple-system,Segoe UI,sans-serif;color:#1a1614;white-space:pre-wrap;">${esc(invoice.details)}</div></td></tr>` : ""}
+    <tr><td style="padding:12px 28px 6px;">
+      <div style="padding:14px 16px;background:#1a1614;color:#f4ede1;font:600 20px/1.2 -apple-system,Segoe UI,sans-serif;text-align:center;">Amount due: ${esc(money(due))}</div>
+    </td></tr>
+    <tr><td style="padding:12px 28px 24px;font:15px/1.6 -apple-system,Segoe UI,sans-serif;color:#1a1614;">
+      ${invoice.dueDate ? `Due ${esc(invoice.dueDate)}. ` : ""}Questions or to pay, reply to this email or call ${esc(BUSINESS.phone)}.
+    </td></tr>`);
+  const text = [
+    `Invoice from JSC RV Service: ${invoice.title}`,
+    invoice.details ? `\n${invoice.details}` : "",
+    ``,
+    `Amount due: ${money(due)}`,
+    invoice.dueDate ? `Due ${invoice.dueDate}` : "",
+    ``,
+    `Questions or to pay, reply to this email or call ${BUSINESS.phone}.`,
+  ].filter(Boolean).join("\n");
+  return deliver({
+    to: invoice.email,
+    replyTo: shop,
+    subject: `Invoice from JSC RV Service — ${invoice.title}`,
+    html,
+    text,
+    logContext: `Would send invoice "${invoice.title}" (${money(due)} due) to ${invoice.email}.`,
   });
 }

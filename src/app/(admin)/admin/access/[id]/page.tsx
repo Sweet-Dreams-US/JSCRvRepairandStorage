@@ -30,6 +30,7 @@ import {
   updateRequestStatusAction,
 } from "@/app/actions/access-admin";
 import { accessStore } from "@/lib/access-store";
+import { billingStore } from "@/lib/billing-store";
 import {
   formatApptWhen,
   formatCurrency,
@@ -61,11 +62,13 @@ export default async function AccessDetailPage({
   const access = await accessStore.getAccess(id);
   if (!access) notFound();
 
-  const [updates, requests, messages, appointments] = await Promise.all([
+  const [updates, requests, messages, appointments, quotes, invoices] = await Promise.all([
     accessStore.listUpdates(id),
     accessStore.listRequests(id),
     accessStore.listMessages(id),
     accessStore.listAppointments(id),
+    billingStore.listQuotes(id),
+    billingStore.listInvoices(id),
   ]);
   const nowIso = new Date().toISOString();
   const upcoming = appointments.filter(
@@ -285,6 +288,53 @@ export default async function AccessDetailPage({
                   </ul>
                 )}
                 <ScheduleForm accessId={access.id} />
+              </CardContent>
+            </Card>
+
+            {/* Billing */}
+            <Card>
+              <CardContent className="p-5">
+                <div className="flex items-center justify-between">
+                  <h2 className="font-display text-lg font-semibold">Billing</h2>
+                  <div className="flex gap-1.5">
+                    <Button asChild size="sm" variant="secondary">
+                      <Link href={`/admin/quotes/new?access=${access.id}`}>+ Quote</Link>
+                    </Button>
+                    <Button asChild size="sm" variant="secondary">
+                      <Link href={`/admin/invoices/new?access=${access.id}`}>+ Invoice</Link>
+                    </Button>
+                  </div>
+                </div>
+                {quotes.length === 0 && invoices.length === 0 ? (
+                  <p className="mt-4 text-center text-sm text-muted-foreground">No quotes or invoices yet.</p>
+                ) : (
+                  <ul className="mt-3 space-y-2 text-sm">
+                    {quotes.map((q) => (
+                      <li key={q.id} className="flex items-center justify-between gap-2 rounded-md border bg-background px-3 py-2">
+                        <span className="min-w-0">
+                          <Badge variant="muted" className="mr-1.5 text-[10px]">Quote</Badge>
+                          <span className="truncate">{q.title}</span>
+                        </span>
+                        <span className="flex shrink-0 items-center gap-2">
+                          <span className="font-semibold tabular-nums">{formatCurrency(q.amount)}</span>
+                          <Badge variant={q.status === "approved" ? "success" : q.status === "sent" ? "info" : "muted"} className="capitalize text-[10px]">{q.status}</Badge>
+                        </span>
+                      </li>
+                    ))}
+                    {invoices.map((inv) => (
+                      <li key={inv.id} className="flex items-center justify-between gap-2 rounded-md border bg-background px-3 py-2">
+                        <span className="min-w-0">
+                          <Badge variant="outline" className="mr-1.5 text-[10px]">Invoice</Badge>
+                          <span className="truncate">{inv.title}</span>
+                        </span>
+                        <span className="flex shrink-0 items-center gap-2">
+                          <span className="font-semibold tabular-nums">{formatCurrency(inv.amount)}</span>
+                          <Badge variant={inv.status === "paid" ? "success" : inv.status === "sent" ? "info" : "muted"} className="capitalize text-[10px]">{inv.status}</Badge>
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </CardContent>
             </Card>
 

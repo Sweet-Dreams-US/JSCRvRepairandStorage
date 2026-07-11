@@ -1,96 +1,113 @@
 import Link from "next/link";
-import { ArrowRight, FileText, Plus } from "lucide-react";
+import { FileText, Plus } from "lucide-react";
 import { Topbar } from "@/components/shell/topbar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { store } from "@/lib/store";
-import { formatCurrency, formatDate, relativeTime } from "@/lib/utils";
+import { sendQuoteAction, setQuoteStatusAction } from "@/app/actions/billing-admin";
+import { billingStore } from "@/lib/billing-store";
+import { formatCurrency, formatDate } from "@/lib/utils";
+import type { CustomerQuote } from "@/lib/types";
 
-const variants: Record<string, "default" | "success" | "destructive" | "info" | "warning" | "muted" | "secondary"> = {
+export const metadata = { title: "Quotes · Admin" };
+
+const STATUS: Record<CustomerQuote["status"], "muted" | "info" | "success" | "destructive"> = {
   draft: "muted",
   sent: "info",
   approved: "success",
   declined: "destructive",
-  expired: "secondary",
 };
 
-export default async function AdminQuotesPage() {
-  const quotes = store.listQuotes();
-  const open = quotes.filter((q) => q.status === "sent").length;
-  const approvedTotal = quotes.filter((q) => q.status === "approved").reduce((s, q) => s + q.total, 0);
+export default async function QuotesPage() {
+  const quotes = await billingStore.listQuotes();
+  const outstanding = quotes.filter((q) => q.status === "sent").reduce((s, q) => s + q.amount, 0);
+
   return (
     <>
       <Topbar
         title="Quotes"
-        subtitle={`${open} awaiting decision · ${formatCurrency(approvedTotal)} approved (all-time)`}
+        subtitle={quotes.length === 0 ? "No quotes yet" : `${quotes.length} total · ${formatCurrency(outstanding)} awaiting approval`}
         rightSlot={
-          <Button size="sm">
-            <Plus className="h-3.5 w-3.5" /> New quote
+          <Button asChild>
+            <Link href="/admin/quotes/new"><Plus className="h-4 w-4" /> New quote</Link>
           </Button>
         }
       />
       <main className="flex-1 bg-secondary/20 p-6">
-        <Card>
-          <CardContent className="p-0">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Quote</TableHead>
-                  <TableHead>Customer</TableHead>
-                  <TableHead>Sent</TableHead>
-                  <TableHead>Items</TableHead>
-                  <TableHead className="text-right">Total</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">&nbsp;</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {quotes.map((q) => {
-                  const c = store.getCustomer(q.customerId);
-                  return (
-                    <TableRow key={q.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <FileText className="h-4 w-4 text-primary" />
-                          <span className="font-semibold">{q.number}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="font-medium">{c?.name}</TableCell>
-                      <TableCell className="text-xs text-muted-foreground">
-                        {q.sentAt ? relativeTime(q.sentAt) : "—"}
-                      </TableCell>
-                      <TableCell className="text-xs">{q.lineItems.length}</TableCell>
-                      <TableCell className="text-right font-semibold tabular-nums">
-                        {formatCurrency(q.total)}
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant={variants[q.status]} className="capitalize">{q.status}</Badge>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Link
-                          href={`/admin/quotes/${q.id}`}
-                          className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
-                        >
-                          View <ArrowRight className="h-3 w-3" />
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+        {quotes.length === 0 ? (
+          <EmptyState />
+        ) : (
+          <div className="grid gap-4">
+            {quotes.map((q) => (
+              <Card key={q.id}>
+                <CardContent className="grid gap-3 p-5 md:grid-cols-[1fr_auto] md:items-center">
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="font-semibold">{q.title}</span>
+                      <Badge variant={STATUS[q.status]} className="capitalize">{q.status}</Badge>
+                    </div>
+                    <div className="mt-1 text-sm text-muted-foreground">
+                      {q.accessId ? (
+                        <Link href={`/admin/access/${q.accessId}`} className="hover:text-primary">{q.customerName}</Link>
+                      ) : q.customerName}
+                      {" · "}{q.email}
+                    </div>
+                    {q.details && <p className="mt-1 whitespace-pre-wrap text-xs text-muted-foreground">{q.details}</p>}
+                    <div className="mt-1 text-[11px] uppercase tracking-wide text-muted-foreground">
+                      {formatDate(q.createdAt)}{q.validUntil ? ` · valid until ${q.validUntil}` : ""}
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-end gap-2">
+                    <div className="text-2xl font-bold tabular-nums">{formatCurrency(q.amount)}</div>
+                    <div className="flex gap-2">
+                      {q.status === "draft" && (
+                        <form action={sendQuoteAction}>
+                          <input type="hidden" name="quoteId" value={q.id} />
+                          <Button type="submit" size="sm">Send</Button>
+                        </form>
+                      )}
+                      {q.status === "sent" && (
+                        <>
+                          <form action={setQuoteStatusAction}>
+                            <input type="hidden" name="quoteId" value={q.id} />
+                            <input type="hidden" name="status" value="approved" />
+                            <Button type="submit" size="sm" variant="secondary">Approved</Button>
+                          </form>
+                          <form action={setQuoteStatusAction}>
+                            <input type="hidden" name="quoteId" value={q.id} />
+                            <input type="hidden" name="status" value="declined" />
+                            <Button type="submit" size="sm" variant="ghost">Declined</Button>
+                          </form>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
       </main>
     </>
+  );
+}
+
+function EmptyState() {
+  return (
+    <Card className="border-2 border-dashed">
+      <CardContent className="flex flex-col items-center gap-6 p-12 text-center">
+        <div className="grid h-20 w-20 place-items-center rounded-full bg-primary/10">
+          <FileText className="h-8 w-8 text-primary" />
+        </div>
+        <div className="max-w-md space-y-2">
+          <h2 className="font-display text-2xl font-bold">No quotes yet</h2>
+          <p className="text-sm text-muted-foreground">
+            Create a quote for a customer — it emails them the estimate and they can approve by
+            replying or calling.
+          </p>
+        </div>
+        <Button asChild size="lg"><Link href="/admin/quotes/new"><Plus className="h-4 w-4" /> New quote</Link></Button>
+      </CardContent>
+    </Card>
   );
 }

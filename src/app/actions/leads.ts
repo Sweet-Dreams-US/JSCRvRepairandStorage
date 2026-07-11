@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { sendInquiryEmail } from "@/lib/email";
-import { store } from "@/lib/store";
+import { leadsStore } from "@/lib/leads-store";
 import type { Lead, RvType } from "@/lib/types";
 
 const leadSchema = z.object({
@@ -36,7 +36,7 @@ export async function submitLeadAction(
     }
     return { ok: false, message: "Please fix the highlighted fields.", errors };
   }
-  const lead = store.createLead({
+  const lead = await leadsStore.createLead({
     name: parsed.data.name,
     email: parsed.data.email,
     phone: parsed.data.phone,
@@ -54,6 +54,6 @@ export async function submitLeadAction(
   revalidatePath("/admin/leads");
   return {
     ok: true,
-    message: "Thanks! Joe or Tina will reach out within one business day.",
+    message: "Thanks! Joe will reach out within one business day.",
   };
 }
