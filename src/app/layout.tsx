@@ -3,6 +3,7 @@ import { Fraunces, JetBrains_Mono, Manrope } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { BUSINESS } from "@/lib/business";
+import { Analytics } from "@vercel/analytics/next";
 
 const body = Manrope({
   subsets: ["latin"],
@@ -66,6 +67,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen bg-cream font-sans text-ink antialiased">
         {children}
         <Toaster />
+        <Analytics />
       </body>
     </html>
   );
