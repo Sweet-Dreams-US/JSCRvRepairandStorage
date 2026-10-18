@@ -52,9 +52,9 @@ export default async function CustomersPage() {
       <main className="flex-1 space-y-4 bg-secondary/20 p-6">
         {!supabaseConfigured() && (
           <div className="rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-xs text-amber-900">
-            <strong>Demo storage:</strong> Supabase isn&apos;t fully connected (no service-role key),
-            so customers live in memory and reset on restart. Add
-            <code> SUPABASE_SERVICE_ROLE_KEY</code> to persist.
+            <strong>Demo storage:</strong> Supabase isn&apos;t fully connected (no admin token or
+            service-role key), so customers live in memory and reset on restart. Add
+            <code> SUPABASE_PUBLISHABLE_KEY</code> + <code>SUPABASE_ADMIN_TOKEN</code> to persist.
           </div>
         )}
 
