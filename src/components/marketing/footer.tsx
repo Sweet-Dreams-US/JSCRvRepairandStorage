@@ -3,6 +3,7 @@ import { Facebook, Instagram, Mail, MapPin, Phone } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 import { OrnamentalRule } from "@/components/marketing/atoms/ornamental-rule";
 import { StampBadge } from "@/components/marketing/atoms/stamp-badge";
+import { BlogFooterLink } from "@/components/marketing/blog-nav";
 import { BUSINESS, formatAddressLine } from "@/lib/business";
 
 export function MarketingFooter() {
@@ -54,6 +55,7 @@ export function MarketingFooter() {
             <FooterLink href="/storage">Storage</FooterLink>
             <FooterLink href="/rentals">Rentals</FooterLink>
             <FooterLink href="/about">About Joe</FooterLink>
+            <BlogFooterLink />
             <FooterLink href="/contact">Contact</FooterLink>
             <FooterLink href="/track">Customer Login</FooterLink>
           </ul>

@@ -266,3 +266,152 @@ h1, h2, h3, h4, h5, h6 {
   border: 3px solid var(--cream);
 }
 ::-webkit-scrollbar-thumb:hover { background: var(--steel); }
+
+/* ───────── Blog posts ───────── */
+.blog-prose {
+  counter-reset: blog-section;
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  color: rgba(26, 22, 20, 0.86);
+}
+.blog-prose p {
+  margin: 0 0 1.35em;
+}
+.blog-prose h2 {
+  counter-increment: blog-section;
+  margin: 3rem 0 1rem;
+  scroll-margin-top: 7rem;
+  font-size: clamp(1.6rem, 4.2vw, 2.1rem);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.blog-prose h2::before {
+  content: counter(blog-section, decimal-leading-zero);
+  display: block;
+  margin-bottom: 0.6rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: var(--garage);
+}
+.blog-prose h3 {
+  margin: 2.25rem 0 0.75rem;
+  scroll-margin-top: 7rem;
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--ink);
+}
+.blog-prose h4 {
+  margin: 1.75rem 0 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+.blog-prose ul,
+.blog-prose ol {
+  margin: 0 0 1.35em;
+  padding-left: 1.5rem;
+}
+.blog-prose ul {
+  list-style: disc;
+}
+.blog-prose ol {
+  list-style: decimal;
+}
+.blog-prose li {
+  margin: 0.5em 0;
+  padding-left: 0.25rem;
+}
+.blog-prose li::marker {
+  color: var(--garage);
+  font-weight: 700;
+}
+.blog-prose strong {
+  font-weight: 700;
+  color: var(--ink);
+}
+.blog-prose em {
+  font-family: var(--font-display), serif;
+  font-style: italic;
+  color: var(--ink);
+}
+.blog-prose a:not(.stamp) {
+  color: var(--garage);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  transition: color 0.15s;
+}
+.blog-prose a:not(.stamp):hover {
+  color: var(--ember);
+}
+.blog-prose blockquote {
+  margin: 0 0 1.35em;
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  border-left: 4px solid var(--garage);
+  font-family: var(--font-display), serif;
+  font-style: italic;
+  color: var(--ink);
+}
+.blog-prose hr {
+  margin: 2.5rem 0;
+  border: 0;
+  border-top: 1px dashed rgba(26, 22, 20, 0.3);
+}
+.blog-prose code {
+  padding: 0.1em 0.35em;
+  border-radius: 0.25rem;
+  background: var(--sand);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.9em;
+}
+.blog-prose table {
+  display: block;
+  max-width: 100%;
+  margin: 0 0 1.35em;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+.blog-prose th,
+.blog-prose td {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid rgba(26, 22, 20, 0.2);
+  text-align: left;
+}
+.blog-prose th {
+  background: var(--sand);
+  font-weight: 700;
+}
+
+/* Callouts inside a post (tip and note) */
+.blog-callout-body {
+  font-size: 1rem;
+  line-height: 1.7;
+}
+.blog-callout-body p {
+  margin: 0 0 0.75em;
+}
+.blog-callout-body p:last-child {
+  margin-bottom: 0;
+}
+.blog-callout-body ul,
+.blog-callout-body ol {
+  margin: 0 0 0.75em;
+  padding-left: 1.25rem;
+}
+.blog-callout-body ul {
+  list-style: disc;
+}
+.blog-callout-body ol {
+  list-style: decimal;
+}
+.blog-callout-body a:not(.stamp) {
+  color: var(--garage);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

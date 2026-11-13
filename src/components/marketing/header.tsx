@@ -5,20 +5,27 @@ import { useEffect, useState } from "react";
 import { Menu, Phone, X } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 import { StampButton } from "@/components/marketing/atoms/stamp-button";
+import { useBlogLive } from "@/components/marketing/blog-nav";
 import { BUSINESS } from "@/lib/business";
 import { cn } from "@/lib/utils";
 
-const nav = [
-  { href: "/services", label: "Services", n: "01" },
-  { href: "/storage", label: "Storage", n: "02" },
-  { href: "/rentals", label: "Rentals", n: "03" },
-  { href: "/about", label: "About Joe", n: "04" },
-  { href: "/contact", label: "Contact", n: "05" },
+const navBeforeBlog = [
+  { href: "/services", label: "Services" },
+  { href: "/storage", label: "Storage" },
+  { href: "/rentals", label: "Rentals" },
+  { href: "/about", label: "About Joe" },
 ];
+const blogItem = { href: "/blog", label: "Blog" };
+const contactItem = { href: "/contact", label: "Contact" };
 
 export function MarketingHeader() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const hasBlog = useBlogLive();
+  const nav = [...navBeforeBlog, ...(hasBlog ? [blogItem] : []), contactItem].map((item, i) => ({
+    ...item,
+    n: String(i + 1).padStart(2, "0"),
+  }));
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 8);
